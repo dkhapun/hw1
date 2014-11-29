@@ -1,11 +1,10 @@
 // mivnei1.cpp : Defines the entry point for the console application.
 //
-"
 #include<iostream>
 #include<cstdio>
 #include<sstream>
 #include<algorithm>
-
+#include"AVLTree.h"
 using namespace std;
 
  
@@ -14,9 +13,9 @@ using namespace std;
  */
 int test()
 {
-    int choice, item;
-    avlTree avl;
-    while (1)
+    //int choice = 40, item = 44;
+	avl_tree::AVLTree<int, int, avl_tree::DefaultKeyGetter<int, int> > avl;
+ /*   while (1)
     {
         cout<<"\n---------------------"<<endl;
         cout<<"AVL Tree Implementation"<<endl;
@@ -34,30 +33,30 @@ int test()
         case 1:
             cout<<"Enter value to be inserted: ";
             cin>>item;
-            root = avl.insert(root, item);
+            avl.insert(item);
             break;
         case 2:
-            if (root == NULL)
+			if (avl.empty())
             {
                 cout<<"Tree is Empty"<<endl;
                 continue;
             }
             cout<<"Balanced AVL Tree:"<<endl;
-            avl.display(root, 1);
+            avl.display( 1);
             break;
         case 3:
             cout<<"Inorder Traversal:"<<endl;
-            avl.inorder(root);
+            avl.inorder();
             cout<<endl;
             break;
         case 4:
             cout<<"Preorder Traversal:"<<endl;
-            avl.preorder(root);
+            avl.preorder();
             cout<<endl;
             break;
         case 5:
             cout<<"Postorder Traversal:"<<endl;
-            avl.postorder(root);    
+            avl.postorder();    
             cout<<endl;
             break;
         case 6:
@@ -66,12 +65,12 @@ int test()
         default:
             cout<<"Wrong Choice"<<endl;
         }
-    }
+    }*/
     return 0;
 }
  
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	return 0;
 }
