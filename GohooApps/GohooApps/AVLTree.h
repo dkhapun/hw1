@@ -59,6 +59,8 @@ namespace avl_tree
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
 		AVLNode<V> *insert(AVLNode<V> *, V);
+		AVLNode<V> *find(AVLNode<V> * root, K key);
+		AVLNode<V> *remove(AVLNode<V> * root, K key);
 		AVLNode<V> *rr_rotation(AVLNode<V> *);
 		AVLNode<V> *ll_rotation(AVLNode<V> *);
 		AVLNode<V> *lr_rotation(AVLNode<V> *);
@@ -141,11 +143,30 @@ int AVLTree<V, K, KeyGetter>::height()
 }
 
 template<typename V, typename K, typename KeyGetter>
+AVLNode<V> * AVLTree<V, K, KeyGetter>::find(AVLNode<V> * root, K key)
+{
+	if (root == NULL)
+	{
+		return NULL;
+	}
+	else if (key < GetKey(root->mdata))
+	{
+		root->left = find(root->left, key);
+	}
+	else if (key > GetKey(root->mdata))
+	{
+		root->right = find(root->right, key);
+	}
+	return root;
+}
+template<typename V, typename K, typename KeyGetter>
 V* AVLTree<V, K, KeyGetter>::find(K key)
 {
-
+	AVLNode<V> * temp = find(mRoot, key);
+	if (temp == 0)
+		return 0;
+	return temp->mdata;
 }
-
 template<typename V, typename K, typename KeyGetter>
 V* AVLTree<V, K, KeyGetter>::max()
 {
@@ -273,6 +294,48 @@ void AVLTree<V, K, KeyGetter>::insert(V value)
 	}
 	
 }
+
+
+/*
+* Insert Element into the tree
+*/
+template<typename V, typename K, typename KeyGetter>
+AVLNode<V> *AVLTree<V, K, KeyGetter>::remove(AVLNode<V> *root, V value)
+{
+	if (root == NULL)
+	{
+		return root;
+	}
+	else if (GetKey(value) == GetKey(root->mdata))
+	{
+		root->right = remove(root->right, value);
+		root = balance(root);
+	}
+	else if (GetKey(value) < GetKey(root->mdata))
+	{
+		root->left = remove(root->left, value);
+		root = balance(root);
+	}
+	else if (GetKey(value) > GetKey(root->mdata))
+	{
+		root->right = remove(root->right, value);
+		root = balance(root);
+	}
+	
+	return root;
+}
+template<typename V, typename K, typename KeyGetter>
+void AVLTree<V, K, KeyGetter>::remove(V value)
+{
+	AVLNode<V>* cur = remove(mRoot, value);
+	if (mRoot == 0)
+	{
+		mRoot = cur;
+	}
+
+}
+
+
 
 template<typename V, typename K, typename KeyGetter>
 bool AVLTree<V, K, KeyGetter>::empty()

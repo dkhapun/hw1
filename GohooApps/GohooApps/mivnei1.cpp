@@ -9,6 +9,20 @@
 using namespace std;
 
 
+struct App
+{
+	int id;
+	int down;
+	int ver;
+};
+class GetID
+{
+public:
+	int operator()(App in)
+	{
+		return in.id;
+	}
+};
 /*
  * Main Contains Menu
  */
@@ -50,7 +64,17 @@ int test()
     return 0;
 }
  
+void test2()
+{
+	App a1 = { 1, 2, 3 };
+	App a2 = { 2, 3, 4 };
+	App a3 = { 3, 4, 5 };
+	App a4 = { 4, 5, 6 };
+	App a5 = { 5, 6, 7 };
+	App a6 = { 6, 7, 8 };
 
+	avl_tree::AVLTree<App, int, GetID> avl;
+}
 int main(int argc, char* argv[])
 {
 	cout << "testing";
