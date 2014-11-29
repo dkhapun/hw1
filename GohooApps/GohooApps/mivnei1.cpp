@@ -23,6 +23,14 @@ public:
 		return in.id;
 	}
 };
+class GetDownloads
+{
+public:
+	int operator()(App in)
+	{
+		return in.down;
+	}
+};
 /*
  * Main Contains Menu
  */
