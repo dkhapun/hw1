@@ -1,5 +1,10 @@
 #pragma once
+#include <iostream>
 #define pow2(n) (1 << (n))
+
+using std::cout;
+using std::endl;
+using std::cin;
 
 /*
  * C++ program to Implement AVL Tree
@@ -16,6 +21,7 @@ namespace avl_tree
 	public:
 
 		AVLNode(const V& data);
+		AVLNode(const V& data, AVLNode *left, AVLNode *right);
 		V mdata;
 		short bf;
 		AVLNode *left;
@@ -25,6 +31,7 @@ namespace avl_tree
 	template<typename V, typename K>
 	class DefaultKeyGetter
 	{
+	public:
 		K operator()(V in)
 		{
 			return K(in);
@@ -34,11 +41,12 @@ namespace avl_tree
 	/*
 	 * Class Declaration
 	 */
-	template<typename V, typename K, class KeyGetter>
+	template<typename V, typename K, typename KeyGetter>
 	class AVLTree
 	{
 	public:
 		V* find(K);
+		V* max();
 		int height();
 		bool empty();
 		void insert(V);
@@ -63,15 +71,23 @@ namespace avl_tree
 		void preorder(AVLNode<V> *);
 		void postorder(AVLNode<V> *);
 
+		KeyGetter GetKey;
+		AVLNode<V>* mRoot;
+		AVLNode<V>* mMax;
 	public:
 		AVLTree();
 		~AVLTree();
-		AVLNode<V>* mRoot;
+		
 	};
 
 
 template<typename V>
 AVLNode<V>::AVLNode(const V& data) : left(0), right(0)
+{
+	mdata = data;
+}
+template<typename V>
+AVLNode<V>::AVLNode(const V& data, AVLNode *left, AVLNode *right) : left(left), right(right)
 {
 	mdata = data;
 }
@@ -89,12 +105,12 @@ AVLNode<V>::~AVLNode()
 }
 
 
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLTree<V, K, KeyGetter>::AVLTree(void) : mRoot(0)
 {
 }
 
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLTree<V, K, KeyGetter>::~AVLTree(void)
 {
 	if (mRoot != 0)
@@ -105,7 +121,7 @@ AVLTree<V, K, KeyGetter>::~AVLTree(void)
 /*
 * Height of AVL Tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 int AVLTree<V, K, KeyGetter>::height(AVLNode<V> *temp)
 {
 	int h = 0;
@@ -113,20 +129,33 @@ int AVLTree<V, K, KeyGetter>::height(AVLNode<V> *temp)
 	{
 		int l_height = height(temp->left);
 		int r_height = height(temp->right);
-		int max_height = max(l_height, r_height);
+		int max_height = ::max(l_height, r_height);
 		h = max_height + 1;
 	}
 	return h;
 }
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 int AVLTree<V, K, KeyGetter>::height()
 {
 	return height(mRoot);
 }
+
+template<typename V, typename K, typename KeyGetter>
+V* AVLTree<V, K, KeyGetter>::find(K key)
+{
+
+}
+
+template<typename V, typename K, typename KeyGetter>
+V* AVLTree<V, K, KeyGetter>::max()
+{
+	return mMax;
+}
+
 /*
 * Height Difference
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 int AVLTree<V, K, KeyGetter>::diff(AVLNode<V> *temp)
 {
 	int l_height = height(temp->left);
@@ -138,7 +167,7 @@ int AVLTree<V, K, KeyGetter>::diff(AVLNode<V> *temp)
 /*
 * Right- Right Rotation
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLNode<V> *AVLTree<V, K, KeyGetter>::rr_rotation(AVLNode<V> *parent)
 {
 	AVLNode<V> *temp;
@@ -150,7 +179,7 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::rr_rotation(AVLNode<V> *parent)
 /*
 * Left- Left Rotation
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLNode<V> *AVLTree<V, K, KeyGetter>::ll_rotation(AVLNode<V> *parent)
 {
 	AVLNode<V> *temp;
@@ -163,7 +192,7 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::ll_rotation(AVLNode<V> *parent)
 /*
 * Left - Right Rotation
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLNode<V> *AVLTree<V, K, KeyGetter>::lr_rotation(AVLNode<V> *parent)
 {
 	AVLNode<V> *temp;
@@ -175,7 +204,7 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::lr_rotation(AVLNode<V> *parent)
 /*
 * Right- Left Rotation
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLNode<V> *AVLTree<V, K, KeyGetter>::rl_rotation(AVLNode<V> *parent)
 {
 	AVLNode<V> *temp;
@@ -187,9 +216,10 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::rl_rotation(AVLNode<V> *parent)
 /*
 * Balancing AVL Tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLNode<V> *AVLTree<V, K, KeyGetter>::balance(AVLNode<V> *temp)
 {
+	AVLNode<V> *parent = temp;
 	int bal_factor = diff(temp);
 	if (bal_factor > 1)
 	{
@@ -205,42 +235,46 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::balance(AVLNode<V> *temp)
 		else
 			temp = rl_rotation(temp);
 	}
+	if (parent == mRoot)
+		mRoot = temp;
 	return temp;
 }
 
 /*
 * Insert Element into the tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 AVLNode<V> *AVLTree<V, K, KeyGetter>::insert(AVLNode<V> *root, V value)
 {
 	if (root == NULL)
 	{
-		root = new AVLNode<V>;
-		root->data = value;
-		root->left = NULL;
-		root->right = NULL;
+		root = new AVLNode<V>(value);
 		return root;
 	}
-	else if (value < root->data)
+	else if (GetKey(value) < GetKey(root->mdata))
 	{
 		root->left = insert(root->left, value);
 		root = balance(root);
 	}
-	else if (value >= root->data)
+	else if (GetKey(value) >= GetKey(root->mdata))
 	{
 		root->right = insert(root->right, value);
 		root = balance(root);
 	}
 	return root;
 }
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::insert(V value)
 {
-	insert(mRoot, value);
+	AVLNode<V>* cur = insert(mRoot, value);
+	if (mRoot == 0)
+	{
+		mRoot = cur;
+	}
+	
 }
 
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 bool AVLTree<V, K, KeyGetter>::empty()
 {
 	return mRoot == 0;
@@ -249,7 +283,7 @@ bool AVLTree<V, K, KeyGetter>::empty()
 /*
 * Display AVL Tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::display(AVLNode<V> *ptr, int level)
 {
 	int i;
@@ -257,28 +291,32 @@ void AVLTree<V, K, KeyGetter>::display(AVLNode<V> *ptr, int level)
 	{
 		display(ptr->right, level + 1);
 		printf("\n");
-		if (ptr == root)
+		if (ptr == mRoot)
 			cout << "Root -> ";
-		for (i = 0; i < level && ptr != root; i++)
+		for (i = 0; i < level && ptr != mRoot; i++)
 			cout << "        ";
-		cout << ptr->data;
+		cout << ptr->mdata;
 		display(ptr->left, level + 1);
 	}
 }
-
+template<typename V, typename K, typename KeyGetter>
+void AVLTree<V, K, KeyGetter>::display(int level)
+{
+	display(mRoot, level);
+}
 /*
 * Inorder Traversal of AVL Tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::inorder(AVLNode<V> *tree)
 {
 	if (tree == NULL)
 		return;
 	inorder(tree->left);
-	cout << tree->data << "  ";
+	cout << tree->mdata << "  ";
 	inorder(tree->right);
 }
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::inorder()
 {
 	inorder(mRoot);
@@ -286,17 +324,17 @@ void AVLTree<V, K, KeyGetter>::inorder()
 /*
 * Preorder Traversal of AVL Tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::preorder(AVLNode<V> *tree)
 {
 	if (tree == NULL)
 		return;
-	cout << tree->data << "  ";
+	cout << tree->mdata << "  ";
 	preorder(tree->left);
 	preorder(tree->right);
 
 }
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::preorder()
 {
 	preorder(mRoot);
@@ -304,16 +342,16 @@ void AVLTree<V, K, KeyGetter>::preorder()
 /*
 * Postorder Traversal of AVL Tree
 */
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::postorder(AVLNode<V> *tree)
 {
 	if (tree == NULL)
 		return;
 	postorder(tree->left);
 	postorder(tree->right);
-	cout << tree->data << "  ";
+	cout << tree->mdata << "  ";
 }
-template<typename V, typename K, class KeyGetter>
+template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::postorder()
 {
 	postorder(mRoot);
