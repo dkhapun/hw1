@@ -24,6 +24,7 @@ namespace avl_tree
 		AVLNode(const V& data, AVLNode *left, AVLNode *right);
 		V mdata;
 		short bf;
+
 		AVLNode *left;
 		AVLNode *right;
 		~AVLNode();
@@ -58,7 +59,7 @@ namespace avl_tree
 
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
-		AVLNode<V> *insert(AVLNode<V> *, V);
+		AVLNode<V> *insert(AVLNode<V> *, V, int lefts);
 		AVLNode<V> *find(AVLNode<V> * root, K key);
 		AVLNode<V> *remove(AVLNode<V> * root, K key);
 		AVLNode<V> *rr_rotation(AVLNode<V> *);
@@ -151,11 +152,11 @@ AVLNode<V> * AVLTree<V, K, KeyGetter>::find(AVLNode<V> * root, K key)
 	}
 	else if (key < GetKey(root->mdata))
 	{
-		root->left = find(root->left, key);
+		root = find(root->left, key);
 	}
 	else if (key > GetKey(root->mdata))
 	{
-		root->right = find(root->right, key);
+		root = find(root->right, key);
 	}
 	return root;
 }
@@ -165,12 +166,12 @@ V* AVLTree<V, K, KeyGetter>::find(K key)
 	AVLNode<V> * temp = find(mRoot, key);
 	if (temp == 0)
 		return 0;
-	return temp->mdata;
+	return &(temp->mdata);
 }
 template<typename V, typename K, typename KeyGetter>
 V* AVLTree<V, K, KeyGetter>::max()
 {
-	return mMax;
+	return &(mMax->mdata);
 }
 
 /*
@@ -265,21 +266,25 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::balance(AVLNode<V> *temp)
 * Insert Element into the tree
 */
 template<typename V, typename K, typename KeyGetter>
-AVLNode<V> *AVLTree<V, K, KeyGetter>::insert(AVLNode<V> *root, V value)
+AVLNode<V> *AVLTree<V, K, KeyGetter>::insert(AVLNode<V> *root, V value, int lefts)
 {
 	if (root == NULL)
 	{
 		root = new AVLNode<V>(value);
+		if (lefts == 0)
+		{
+			mMax = root;
+		}
 		return root;
 	}
 	else if (GetKey(value) < GetKey(root->mdata))
 	{
-		root->left = insert(root->left, value);
+		root->left = insert(root->left, value, ++lefts);
 		root = balance(root);
 	}
 	else if (GetKey(value) >= GetKey(root->mdata))
 	{
-		root->right = insert(root->right, value);
+		root->right = insert(root->right, value, lefts);
 		root = balance(root);
 	}
 	return root;
@@ -287,7 +292,7 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::insert(AVLNode<V> *root, V value)
 template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::insert(V value)
 {
-	AVLNode<V>* cur = insert(mRoot, value);
+	AVLNode<V>* cur = insert(mRoot, value, 0);
 	if (mRoot == 0)
 	{
 		mRoot = cur;
@@ -300,7 +305,7 @@ void AVLTree<V, K, KeyGetter>::insert(V value)
 * Insert Element into the tree
 */
 template<typename V, typename K, typename KeyGetter>
-AVLNode<V> *AVLTree<V, K, KeyGetter>::remove(AVLNode<V> *root, V value)
+AVLNode<V> *AVLTree<V, K, KeyGetter>::remove(AVLNode<V> *root, K value)
 {
 	if (root == NULL)
 	{
@@ -325,7 +330,7 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::remove(AVLNode<V> *root, V value)
 	return root;
 }
 template<typename V, typename K, typename KeyGetter>
-void AVLTree<V, K, KeyGetter>::remove(V value)
+void AVLTree<V, K, KeyGetter>::remove(K value)
 {
 	AVLNode<V>* cur = remove(mRoot, value);
 	if (mRoot == 0)

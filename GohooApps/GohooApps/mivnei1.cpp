@@ -69,6 +69,14 @@ int test()
 	cout << endl << "-------------------------------" << endl;
 	avl.inorder();
 	
+	assert(avl.find(20) == 0);
+	assert(*(avl.find(5)) == 5);
+	assert(*(avl.find(15)) == 15);
+	assert(*(avl.find(4)) == 4);
+	assert(avl.find(7) == 0);
+	assert(*(avl.max()) == 15);
+
+	
     return 0;
 }
  
