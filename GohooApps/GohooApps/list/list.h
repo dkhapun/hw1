@@ -1,6 +1,7 @@
 #pragma once
 #include "list_node.h"
 #include "list_iter.h"
+#include "functor.h"
 #include <stdlib.h>
 
 template <class D>
@@ -21,7 +22,14 @@ public:
 
 	~List()
 	{
-		
+		ListNode<D>* pcurrent = pfirst;
+		ListNode<D>* pnext;
+		while(pcurrent != NULL)
+		{
+			pnext = pcurrent->pnext;
+			delete pcurrent;
+			pcurrent = pnext;
+		}
 	}
 
 	int Size() const
@@ -37,6 +45,29 @@ public:
 	ListIter<D> Last() const
 	{
 		return ListIter<D>(plast);
+	}
+
+	/*Find and return iterator to the first matching node.
+	  NULL iterator if not found*/
+	ListIter<D> Find(Functor<bool, D const&> const& isMatch)
+	{
+		ListNode<D>* pnode = pfirst;
+		while(pnode != NULL && !isMatch(pnode->data))
+		{
+			pnode = pnode->pnext;
+		}
+		return ListIter<D>(pnode);
+	}
+
+	/*a more general find, starts search from an iterator*/
+	ListIter<D> Find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
+	{
+		ListNode<D>* pnode = iter.pnode;
+		while(pnode != NULL && !isMatch(pnode->data))
+		{
+			pnode = pnode->pnext;
+		}
+		return ListIter<D>(pnode);
 	}
 
 	/*Insert after where the iterator is pointing
