@@ -21,9 +21,36 @@
     <ClCompile Include="AVLTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="datastruct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="from_fb_AVLTreeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="list\list_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVLTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="datastruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="library1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="list\functor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list_iter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="list\list_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

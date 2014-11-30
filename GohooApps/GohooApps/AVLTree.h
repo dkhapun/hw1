@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 #include <iostream>
 #define pow2(n) (1 << (n))
 
@@ -22,9 +23,9 @@ namespace avl_tree
 
 		AVLNode(const V& data);
 		AVLNode(const V& data, AVLNode *left, AVLNode *right);
+
 		V mdata;
 		short bf;
-
 		AVLNode *left;
 		AVLNode *right;
 		~AVLNode();
@@ -62,6 +63,7 @@ namespace avl_tree
 		AVLNode<V> *insert(AVLNode<V> *, V, int lefts);
 		AVLNode<V> *find(AVLNode<V> * root, K key);
 		AVLNode<V> *remove(AVLNode<V> * root, K key);
+		AVLNode<V> *min(AVLNode<V> * root);
 		AVLNode<V> *rr_rotation(AVLNode<V> *);
 		AVLNode<V> *ll_rotation(AVLNode<V> *);
 		AVLNode<V> *lr_rotation(AVLNode<V> *);
@@ -69,6 +71,7 @@ namespace avl_tree
 
 		int height(AVLNode<V> *);
 		int diff(AVLNode<V> *);
+		
 		void display(AVLNode<V> *, int level);
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
@@ -107,7 +110,6 @@ AVLNode<V>::~AVLNode()
 	}
 }
 
-
 template<typename V, typename K, typename KeyGetter>
 AVLTree<V, K, KeyGetter>::AVLTree(void) : mRoot(0)
 {
@@ -142,6 +144,7 @@ int AVLTree<V, K, KeyGetter>::height()
 {
 	return height(mRoot);
 }
+
 
 template<typename V, typename K, typename KeyGetter>
 AVLNode<V> * AVLTree<V, K, KeyGetter>::find(AVLNode<V> * root, K key)
@@ -300,7 +303,16 @@ void AVLTree<V, K, KeyGetter>::insert(V value)
 	
 }
 
-
+template<typename V, typename K, typename KeyGetter>
+AVLNode<V> * AVLTree<V, K, KeyGetter>::min(AVLNode<V> * root)
+{
+	AVLNode<V> * temp = root;
+	while (temp->left != 0)
+	{
+		temp = temp->left;
+	}
+	return temp;
+}
 /*
 * Insert Element into the tree
 */
@@ -311,31 +323,70 @@ AVLNode<V> *AVLTree<V, K, KeyGetter>::remove(AVLNode<V> *root, K value)
 	{
 		return root;
 	}
-	else if (GetKey(value) == GetKey(root->mdata))
+	AVLNode<V> * toremove = 0;
+	AVLNode<V> ** rootside = 0;
+	
+	//test if we found the node to remove
+	if (GetKey(value) == GetKey(root->left->mdata))
 	{
-		root->right = remove(root->right, value);
-		root = balance(root);
+		toremove = root->left;
+		rootside = &root->left;
+	}
+	else if (GetKey(value) == GetKey(root->right->mdata))
+	{
+		toremove = root->right;
+		rootside = &root->right;
+	}
+	if (toremove != 0)
+	{
+		if (toremove->left == 0 && toremove->right == 0)
+		{
+			*rootside = 0;
+		}
+		if (toremove->left == 0 && toremove->right != 0)
+		{
+			*rootside = toremove->right;
+		}
+		else if (toremove->left != 0 && toremove->right == 0)
+		{
+			*rootside = toremove->left;
+		}
+		else if (toremove->left != 0 && toremove->right != 0)
+		{
+			//goto to minimum in the right subtree
+			AVLNode<V> * mind = min(toremove->right);
+			V tval = mind->mdata;
+			remove(mRoot, GetKey(tval));
+			toremove->mdata = tval;
+		}
+		return toremove;
 	}
 	else if (GetKey(value) < GetKey(root->mdata))
 	{
-		root->left = remove(root->left, value);
-		root = balance(root);
+		toremove = remove(root->left, value);
 	}
 	else if (GetKey(value) > GetKey(root->mdata))
 	{
-		root->right = remove(root->right, value);
+		toremove = remove(root->right, value);
+	}
+	if (toremove != 0)
+	{
+		delete toremove;
 		root = balance(root);
 	}
-	
 	return root;
 }
 template<typename V, typename K, typename KeyGetter>
 void AVLTree<V, K, KeyGetter>::remove(K value)
 {
 	AVLNode<V>* cur = remove(mRoot, value);
-	if (mRoot == 0)
+	if (cur != 0)
 	{
-		mRoot = cur;
+	//	delete cur;
+	}
+	else
+	{
+		throw std::logic_error("node not found");
 	}
 
 }

@@ -12,15 +12,15 @@
 #include <chrono>
 #include <algorithm>
 
-int main(){
-	Tree<int, int> tree;
+int main2(){
+/*	Tree<int, int> tree;
 
 	//Specific Cases
 
 	/*correct output for the four next cases
 	1 BF: 0 Height: 0
 	2 BF: 0 Height: 1
-	3 BF: 0 Height: 0 */
+	3 BF: 0 Height: 0 
 
 	//basic LL root change
 	tree.addNode(3,3);
@@ -59,7 +59,7 @@ int main(){
 	5 BF: 0 Height: 0
 	6 BF: 1 Height: 3
 	7 BF: 0 Height: 0
-	8 BF: 1 Height: 1 */
+	8 BF: 1 Height: 1 
 	tree.addNode(6,6);
 	tree.addNode(4,4);
 	tree.addNode(8,8);
@@ -80,7 +80,7 @@ int main(){
 	5 BF: 0 Height: 0
 	6 BF: 1 Height: 3
 	7 BF: 0 Height: 0
-	8 BF: 1 Height: 1 */
+	8 BF: 1 Height: 1
 	tree.addNode(6,6);
 	tree.addNode(4,4);
 	tree.addNode(8,8);
@@ -98,7 +98,7 @@ int main(){
 	2 BF: 0 Height: 1
 	3 BF: 0 Height: 0
 	5 BF: 1 Height: 2
-	7 BF: 0 Height: 0*/
+	7 BF: 0 Height: 0
 	tree.addNode(5,5);
 	tree.addNode(7,7);
 	tree.addNode(1,1);
@@ -113,7 +113,7 @@ int main(){
 	2 BF: 0 Height: 1
 	3 BF: 0 Height: 0
 	5 BF: 1 Height: 2
-	7 BF: 0 Height: 0*/
+	7 BF: 0 Height: 0
 	tree.addNode(5,5);
 	tree.addNode(7,7);
 	tree.addNode(1,1);
@@ -127,7 +127,7 @@ int main(){
 	2 BF: 0 Height: 0
 	3 BF: 1 Height: 1
 	5 BF: 1 Height: 2
-	6 BF: 0 Height: 0*/
+	6 BF: 0 Height: 0
 	tree.addNode(4,4);
 	tree.addNode(5,5);
 	tree.addNode(3,3);
@@ -144,7 +144,6 @@ int main(){
 	5 BF: 0 Height: 2
 	6 BF: 0 Height: 0
 	7 BF: 0 Height: 1
-	8 BF: 0 Height: 0 */
 	tree.addNode(4,4);
 	tree.addNode(3,3);
 	tree.addNode(7,7);
@@ -164,7 +163,7 @@ int main(){
 	5 BF: 0 Height: 0
 	7 BF: 1 Height: 3
 	8 BF: -1 Height: 1
-	9 BF: 0 Height: 0*/
+	9 BF: 0 Height: 0
 	tree.addNode(7,7);
 	tree.addNode(3,3);
 	tree.addNode(8,8);
@@ -189,7 +188,7 @@ int main(){
 	10 BF: 0 Height: 0
 	12 BF: -1 Height: 2
 	13 BF: -1 Height: 1
-	14 BF: 0 Height: 0*/
+	14 BF: 0 Height: 0
 	tree.addNode(9,9);
 	tree.addNode(3,3);
 	tree.addNode(12,12);
@@ -213,7 +212,7 @@ int main(){
 	3 BF: 0 Height: 0
 	4 BF: 0 Height: 2
 	7 BF: -1 Height: 1
-	8 BF: 0 Height: 0*/
+	8 BF: 0 Height: 0
 	tree.addNode(7,7);
 	tree.addNode(2,2);
 	tree.addNode(8,8);
@@ -232,7 +231,7 @@ int main(){
 	3 BF: 0 Height: 2
 	4 BF: 0 Height: 0
 	7 BF: 0 Height: 1
-	8 BF: 0 Height: 0*/
+	8 BF: 0 Height: 0
 	tree.addNode(7,7);
 	tree.addNode(3,3);
 	tree.addNode(8,8);
@@ -251,7 +250,7 @@ int main(){
 	7 BF: 0 Height: 0
 	8 BF: 0 Height: 2
 	9 BF: -1 Height: 1
-	10 BF: 0 Height: 0*/
+	10 BF: 0 Height: 0
 	tree.addNode(3,3);
 	tree.addNode(2,2);
 	tree.addNode(8,8);
@@ -270,7 +269,7 @@ int main(){
 	7 BF: 0 Height: 2
 	10 BF: 0 Height: 0
 	13 BF: 0 Height: 1
-	14 BF: 0 Height: 0*/
+	14 BF: 0 Height: 0
 	tree.addNode(3,3);
 	tree.addNode(2,2);
 	tree.addNode(13,13);
@@ -294,7 +293,7 @@ int main(){
 	17 BF: 0 Height: 0
 	19 BF: -1 Height: 2
 	21 BF: -1 Height: 1
-	23 BF: 0 Height: 0*/
+	23 BF: 0 Height: 0
 	tree.addNode(9,9);
 	tree.addNode(3,3);
 	tree.addNode(15,15);
@@ -323,7 +322,7 @@ int main(){
 	17 BF: 0 Height: 0
 	19 BF: -1 Height: 2
 	21 BF: -1 Height: 1
-	23 BF: 0 Height: 0*/
+	23 BF: 0 Height: 0
 	tree.addNode(9,9);
 	tree.addNode(3,3);
 	tree.addNode(15,15);
@@ -353,7 +352,7 @@ int main(){
 	17 BF: 0 Height: 0
 	18 BF: 0 Height: 1
 	20 BF: 0 Height: 0
-	 */
+	 
 	tree.addNode(15,15);
 	tree.addNode(10,10);
 	tree.addNode(20,20);
@@ -382,7 +381,7 @@ int main(){
 	15 BF: 0 Height: 2
 	20 BF: 0 Height: 0
 	21 BF: 0 Height: 1
-	22 BF: 0 Height: 0 */
+	22 BF: 0 Height: 0
 	tree.addNode(15,15);
 	tree.addNode(10,10);
 	tree.addNode(20,20);
@@ -404,7 +403,7 @@ int main(){
 	 * 2 BF: 0 Height: 0
 	3 BF: -1 Height: 2
 	4 BF: 0 Height: 0
-	6 BF: 1 Height: 1*/
+	6 BF: 1 Height: 1
 
 	tree.addNode(5,5);
 	tree.addNode(3,3);
@@ -419,7 +418,7 @@ int main(){
 	/*correct output
 	 * 2 BF: 0 Height: 0
 	3 BF: 0 Height: 1
-	6 BF: 0 Height: 0*/
+	6 BF: 0 Height: 0
 	tree.addNode(5,5);
 	tree.addNode(3,3);
 	tree.addNode(6,6);
@@ -449,7 +448,7 @@ int main(){
 		 tree.treeClear();
 		 tree.printTree();
 		 std::cout << '\n';
-	}
+	}*/
 
 	return 0;
 }

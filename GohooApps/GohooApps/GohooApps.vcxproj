@@ -79,10 +79,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AVLTree.cpp" />
+    <ClCompile Include="datastruct.cpp" />
+    <ClCompile Include="from_fb_AVLTreeTest.cpp" />
+    <ClCompile Include="list\list_test.cpp" />
     <ClCompile Include="mivnei1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="datastruct.h" />
+    <ClInclude Include="library1.h" />
+    <ClInclude Include="list\functor.h" />
+    <ClInclude Include="list\list.h" />
+    <ClInclude Include="list\list_iter.h" />
+    <ClInclude Include="list\list_node.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

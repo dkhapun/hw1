@@ -38,6 +38,7 @@ public:
 		{
 			pnode = pnode->pnext;
 		}
+		return *this;
 	}
 	
 	ListIter& operator --()
@@ -46,6 +47,7 @@ public:
 		{
 			pnode = pnode->pprev;
 		}
+		return *this;
 	}
 
 	friend bool operator ==(ListIter const& iter1, ListIter const& iter2)

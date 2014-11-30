@@ -76,7 +76,11 @@ int test()
 	assert(avl.find(7) == 0);
 	assert(*(avl.max()) == 15);
 
-	
+	avl.remove(4);
+	avl.remove(2);
+	avl.display(1);
+	avl.remove(5);
+	avl.display(1);
     return 0;
 }
  
