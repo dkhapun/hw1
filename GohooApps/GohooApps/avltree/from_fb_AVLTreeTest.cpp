@@ -12,7 +12,7 @@
 /*#include <chrono>*/
 #include <algorithm>
 
-int main2(){
+int main3(){
 /*	Tree<int, int> tree;
 
 	//Specific Cases

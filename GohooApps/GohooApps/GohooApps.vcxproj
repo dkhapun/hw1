@@ -10,6 +10,22 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="avltree\AVLTree.cpp" />
+    <ClCompile Include="avltree\from_fb_AVLTreeTest.cpp" />
+    <ClCompile Include="datastruct.cpp" />
+    <ClCompile Include="list\list_test.cpp" />
+    <ClCompile Include="mivnei1.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="avltree\AVLTree.h" />
+    <ClInclude Include="datastruct.h" />
+    <ClInclude Include="library1.h" />
+    <ClInclude Include="list\functor.h" />
+    <ClInclude Include="list\list.h" />
+    <ClInclude Include="list\list_iter.h" />
+    <ClInclude Include="list\list_node.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{340B550F-310C-4D84-B616-C430CCE3C289}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -77,22 +93,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="AVLTree.cpp" />
-    <ClCompile Include="datastruct.cpp" />
-    <ClCompile Include="from_fb_AVLTreeTest.cpp" />
-    <ClCompile Include="list\list_test.cpp" />
-    <ClCompile Include="mivnei1.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AVLTree.h" />
-    <ClInclude Include="datastruct.h" />
-    <ClInclude Include="library1.h" />
-    <ClInclude Include="list\functor.h" />
-    <ClInclude Include="list\list.h" />
-    <ClInclude Include="list\list_iter.h" />
-    <ClInclude Include="list\list_node.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

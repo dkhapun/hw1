@@ -1,6 +1,7 @@
 #pragma once
 #include <stdexcept>
 #include <iostream>
+#include "..\list\list.h"
 #define pow2(n) (1 << (n))
 
 using std::cout;
@@ -43,7 +44,7 @@ namespace avl_tree
 	class AVLTree
 	{
 	public:
-		/*find value by key*/
+		/*find value by key, return 0 if not found*/
 		V* find(K);
 		/*get the value with max key*/
 		V* max();
@@ -63,6 +64,11 @@ namespace avl_tree
 		void preorder();
 		/*print out values postorder*/
 		void postorder();
+		/*creates an inrodered list of the values that are in the tree*/
+		List<V> toList();
+		/*generic foreach*/
+		template<class Do>
+		void for_each_inorder(Do& callback);
 
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
@@ -79,9 +85,25 @@ namespace avl_tree
 		int diff(AVLNode<V> *);
 		
 		void display(AVLNode<V> *, int level);
+		template<class Do>
+		void for_each_inorder(AVLNode<V> *, Do& callback);
+		
+		
+
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
 		void postorder(AVLNode<V> *);
+		
+		class ListGatherer
+		{
+		public:
+			List<V> list;
+			void operator()(V data)
+			{
+				list.Insert(list.First(), data);
+			}
+
+		};
 
 		AVLNode<V>* mRoot;
 		AVLNode<V>* mMax;
@@ -147,7 +169,7 @@ int AVLTree<V, K>::height(AVLNode<V> *temp)
 	{
 		int l_height = height(temp->left);
 		int r_height = height(temp->right);
-		int max_height = max(l_height, r_height);
+		int max_height = ::max(l_height, r_height);
 		h = max_height + 1;
 	}
 	return h;
@@ -402,10 +424,15 @@ void AVLTree<V, K>::remove(K value)
 	{
 		throw std::logic_error("node not found");
 	}
-
 }
 
-
+template<typename V, typename K>
+List<V> AVLTree<V, K>::toList()
+{
+	ListGatherer getter;
+	for_each_inorder(mRoot, getter);
+	return getter.list;
+}
 
 template<typename V, typename K>
 bool AVLTree<V, K>::empty()
@@ -454,6 +481,26 @@ void AVLTree<V, K>::inorder()
 {
 	inorder(mRoot);
 }
+
+template<typename V, typename K>
+template<class Do>
+void AVLTree<V, K>::for_each_inorder(AVLNode<V> *tree, Do& callback)
+{
+	if(tree == NULL)
+		return;
+	for_each_inorder(tree->left, callback);
+	callback(tree->mdata);
+	for_each_inorder(tree->right, callback);
+}
+
+template<typename V, typename K>
+template<class Do>
+void AVLTree<V, K>::for_each_inorder(Do& callback)
+{
+	for_each_inorder(mRoot, callback);
+}
+
+
 /*
 * Preorder Traversal of AVL Tree
 */

@@ -5,7 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <assert.h>
-#include "AVLTree.h"
+#include "avltree\AVLTree.h"
 using namespace std;
 
 
@@ -31,12 +31,17 @@ public:
 		return in.down;
 	}
 };
+
+void printNode(int data)
+{
+	cout << "'" << data << "',";
+}
 /*
  * Main Contains Menu
  */
 int test()
 {
-	avl_tree::AVLTree<int, int, avl_tree::DefaultKeyGetter<int, int> > avl;
+	avl_tree::AVLTree<int, int> avl;
 	assert(avl.empty() == true);
 	avl.insert(8);
 	assert(avl.empty() == false);
@@ -68,7 +73,9 @@ int test()
 	avl.postorder();
 	cout << endl << "-------------------------------" << endl;
 	avl.inorder();
-	
+	cout << endl << "-------------------------------" << endl;
+	avl.for_each_inorder(printNode);
+
 	assert(avl.find(20) == 0);
 	assert(*(avl.find(5)) == 5);
 	assert(*(avl.find(15)) == 15);
@@ -93,7 +100,7 @@ void test2()
 	App a5 = { 5, 6, 7 };
 	App a6 = { 6, 7, 8 };
 
-	avl_tree::AVLTree<App, int, GetID> avl;
+	avl_tree::AVLTree<App, int> avl;
 }
 int main(int argc, char* argv[])
 {

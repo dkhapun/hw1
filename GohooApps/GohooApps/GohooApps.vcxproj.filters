@@ -15,26 +15,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="mivnei1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AVLTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="datastruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="from_fb_AVLTreeTest.cpp">
+    <ClCompile Include="mivnei1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="list\list_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="avltree\AVLTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="avltree\from_fb_AVLTreeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AVLTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="datastruct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -51,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="list\list_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="avltree\AVLTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
