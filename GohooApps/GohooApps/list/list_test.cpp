@@ -31,7 +31,8 @@ private:
 };
 
 /*list test*/
-int main2()
+//int main()
+int someLie()
 {
 	List<int> list;
 	ListIter<int> iter;
@@ -90,5 +91,26 @@ int main2()
 	iter = list.Find(iter, Equals(55));
 	if(iter != NULL) {printf("prev %d\n", *(--iter));} else {printf("is null\n");}
 	
+	/*merge test
+	**************/	
+	List<int> otherList;
+	while(list.First() != NULL) {list.Delete(list.First());}
+	/*empty empty*/
+	list.Merge(otherList);
+	Print(list);	 
+	/*notempty empty*/
+	for(int i = 10; i > 0; --i)
+	{
+		list.Insert(NULL, i);
+	}
+	list.Merge(otherList);
+	Print(list);		 
+	/*empty notempty*/
+	otherList.Merge(list);
+	Print(otherList);		 
+	/*notempty notempty*/		 
+	list.Merge(otherList);
+	Print(list);
+
 	return 0;
 }

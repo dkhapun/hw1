@@ -66,7 +66,7 @@ public:
 
 	/*Insert after where the iterator is pointing
 	  NULL iterator means insert as first*/
-	void Insert(ListIter<D> iter, D const& data)
+	ListIter<D> Insert(ListIter<D> iter, D const& data)
 	{
 		/*create node*/
 		ListNode<D>* pnode = new ListNode<D>;
@@ -93,6 +93,7 @@ public:
 		}
 		/**/
 		++size;
+		return ListIter<D>(pnode);
 	}
 
 	/*delete a node pointed by an iterator*/
@@ -124,6 +125,31 @@ public:
 		--size;
 		delete iter.pnode;
 		iter.pnode = NULL;
+	}
+
+	/*merge a list into this list. will keep order using < operator 
+	:/*/
+	List<D>& Merge(List<D> const& other)
+	{
+		ListIter<D> pcurrent = First();
+		ListIter<D> pprev = NULL;
+		ListIter<D> pother = other.First();
+		while(pother != NULL)
+		{
+			if(pcurrent == NULL || *pother < *pcurrent)
+			{
+				/*insert after prev*/
+				pprev = Insert(pprev, *pother);
+			}
+			else
+			{
+				/*insert after current*/
+				pprev = Insert(pcurrent, *pother);
+				++(++pcurrent);
+			}
+			++pother;
+		}
+
 	}
 
 private:

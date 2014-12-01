@@ -1,5 +1,11 @@
 #pragma once
 #include "library1.h"
+#include "list/list.h"
+#include "avltree/avltree.h"
+
+#include "versiondata.h"
+#include "appdata.h"
+#include "downloaddata.h"
 
 class DataStruct
 {
@@ -98,4 +104,8 @@ public:
 	 */
 	StatusType UpdateDownloads(int groupBase, int multiplyFactor);
 
+private:
+	List<VersionData> versionsList;
+	avl_tree::AVLTree<AppData, int> appsTree;
+	avl_tree::AVLTree<DownloadData, int> downloadsTree; 
 };
