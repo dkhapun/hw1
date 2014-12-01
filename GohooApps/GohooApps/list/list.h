@@ -16,10 +16,7 @@ public:
 	size(0)
 	{
 	}
-
-	/*todo? construct copy*/
-	/*todo? operator =*/
-
+	/*destruct*/
 	~List()
 	{
 		ListNode<D>* pcurrent = pfirst;
@@ -31,35 +28,32 @@ public:
 			pcurrent = pnext;
 		}
 	}
-
+	/*get size of list*/
 	int Size() const
 	{
 		return size;
 	}
-
+	/*get iterator to first node
+	null if there isn't one*/
 	ListIter<D> First() const
 	{
 		return ListIter<D>(pfirst);
 	}
-
+	/*get iterator to last node
+	null if there isn't one*/
 	ListIter<D> Last() const
 	{
 		return ListIter<D>(plast);
 	}
 
 	/*Find and return iterator to the first matching node.
-	  NULL iterator if not found*/
+	  null if not found*/
 	ListIter<D> Find(Functor<bool, D const&> const& isMatch)
 	{
-		ListNode<D>* pnode = pfirst;
-		while(pnode != NULL && !isMatch(pnode->data))
-		{
-			pnode = pnode->pnext;
-		}
-		return ListIter<D>(pnode);
+		return Find(First(), isMatch);
 	}
 
-	/*a more general find, starts search from an iterator*/
+	/*a more general Find, starts search from an iterator*/
 	ListIter<D> Find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
 	{
 		ListNode<D>* pnode = iter.pnode;
@@ -101,6 +95,7 @@ public:
 		++size;
 	}
 
+	/*delete a node pointed by an iterator*/
 	void Delete(ListIter<D> iter)
 	{
 		/*nothing to delete*/

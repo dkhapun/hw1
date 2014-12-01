@@ -31,7 +31,7 @@ private:
 };
 
 /*list test*/
-int main3()
+int main()
 {
 	List<int> list;
 	ListIter<int> iter;

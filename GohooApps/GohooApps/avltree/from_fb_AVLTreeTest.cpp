@@ -8,8 +8,8 @@
 #include "AVLTree.h"
 #include <vector>
 #include <ostream>
-#include <random>
-#include <chrono>
+/*#include <random>*/
+/*#include <chrono>*/
 #include <algorithm>
 
 int main2(){

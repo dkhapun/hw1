@@ -13,9 +13,11 @@ using std::cin;
 
 namespace avl_tree
 {
-	/*
+	/**********************************************************
 	 * Node Declaration
-	 */
+	 * this is a node for the AVL tree
+	 * V is the data stored in each node
+	 **********************************************************/
 	template<class V>
 	class AVLNode
 	{
@@ -25,37 +27,41 @@ namespace avl_tree
 		AVLNode(const V& data, AVLNode *left, AVLNode *right);
 
 		V mdata;
-		short bf;
+		short bf; /*balance factor*/
 		AVLNode *left;
 		AVLNode *right;
 		~AVLNode();
 	};
-	template<typename V, typename K>
-	class DefaultKeyGetter
-	{
-	public:
-		K operator()(V in)
-		{
-			return K(in);
-		}
-	};
 
-	/*
-	 * Class Declaration
-	 */
+	/*********************************************************
+	 * AVLTree Declaration
+	 * V is the value/data stored in each node
+	 * K is the key that is somewhere in the data
+	 * KeyGetter is a function/functor that should extract the key from data
+	 *********************************************************/
 	template<typename V, typename K, typename KeyGetter>
 	class AVLTree
 	{
 	public:
+		/*find value by key*/
 		V* find(K);
+		/*get the value with max key*/
 		V* max();
+		/*get height of tree*/
 		int height();
+		/*check if empty*/
 		bool empty();
+		/*insert new value to the tree*/
 		void insert(V);
+		/*remove value from the tree, by its key*/
 		void remove(K);
+		/*print out the values ordered like a tree*/
 		void display(int level);
+		/*print out values inorder*/
 		void inorder();
+		/*print out values preorder*/
 		void preorder();
+		/*print out values postorder*/
 		void postorder();
 
 	private:
@@ -81,12 +87,17 @@ namespace avl_tree
 		AVLNode<V>* mRoot;
 		AVLNode<V>* mMax;
 	public:
+		/*construct empty*/
 		AVLTree();
+		/*destruct*/
 		~AVLTree();
 		
 	};
 
 
+/*********************************************************
+* Node implementation
+*********************************************************/
 template<typename V>
 AVLNode<V>::AVLNode(const V& data) : left(0), right(0)
 {
@@ -110,10 +121,15 @@ AVLNode<V>::~AVLNode()
 	}
 }
 
+/*********************************************************
+* AVLTree implementation
+*********************************************************/
+
 template<typename V, typename K, typename KeyGetter>
 AVLTree<V, K, KeyGetter>::AVLTree(void) : mRoot(0)
 {
 }
+
 
 template<typename V, typename K, typename KeyGetter>
 AVLTree<V, K, KeyGetter>::~AVLTree(void)
@@ -123,9 +139,7 @@ AVLTree<V, K, KeyGetter>::~AVLTree(void)
 		delete mRoot;
 	}
 }
-/*
-* Height of AVL Tree
-*/
+
 template<typename V, typename K, typename KeyGetter>
 int AVLTree<V, K, KeyGetter>::height(AVLNode<V> *temp)
 {
@@ -134,11 +148,12 @@ int AVLTree<V, K, KeyGetter>::height(AVLNode<V> *temp)
 	{
 		int l_height = height(temp->left);
 		int r_height = height(temp->right);
-		int max_height = ::max(l_height, r_height);
+		int max_height = max(l_height, r_height);
 		h = max_height + 1;
 	}
 	return h;
 }
+
 template<typename V, typename K, typename KeyGetter>
 int AVLTree<V, K, KeyGetter>::height()
 {
@@ -409,7 +424,7 @@ void AVLTree<V, K, KeyGetter>::display(AVLNode<V> *ptr, int level)
 	if (ptr != NULL)
 	{
 		display(ptr->right, level + 1);
-		printf("\n");
+		cout << endl;
 		if (ptr == mRoot)
 			cout << "Root -> ";
 		for (i = 0; i < level && ptr != mRoot; i++)
