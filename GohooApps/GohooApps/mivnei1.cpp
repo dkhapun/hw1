@@ -23,9 +23,10 @@ public:
 		return in.id;
 	}
 };
+
 class GetDownloads
 {
-public:
+public: 
 	int operator()(App in)
 	{
 		return in.down;
@@ -67,7 +68,7 @@ int test()
 	cout << endl << "-------------------------------" << endl;
 	avl.insert(2);
 	avl.display(1);
-	cout << endl << "-------------------------------" << endl;
+	cout << endl << "-------------------------------" << endl; 
 	avl.preorder();
 	cout << endl << "-------------------------------" << endl;
 	avl.postorder();

@@ -4,12 +4,12 @@
 void Print(List<int> const& list)
 {
 	ListIter<int> iter;
-	for(ListIter<int> iter = list.First(); iter != NULL; ++iter)
+	for(ListIter<int> iter = list.begin(); iter != NULL; ++iter)
 	{
 		printf("%d  ", *iter);
 	}
 	printf("\n");
-	printf("size %d\n", list.Size());
+	printf("size %d\n", list.size());
 }
 
 class Equals : public Functor<bool, int const&>
@@ -38,78 +38,78 @@ int someLie()
 	ListIter<int> iter;
 	
 	Print(list);
-	list.Insert(NULL, 33);
+	list.insert(NULL, 33);
 	Print(list);
 
 	for(int i = 10; i > 0; --i)
 	{
-		list.Insert(NULL, i);
+		list.insert(NULL, i);
 	}
 	Print(list);
 
 
-	while(*list.First() != 10)
+	while(*list.begin() != 10)
 	{
-	 list.Delete(list.First());
+	 list.remove(list.begin());
 	}
 	Print(list);
 
-	while(list.First() != NULL)
+	while(list.begin() != NULL)
 	{
-	 list.Delete(list.First());
+	 list.remove(list.begin());
 	}
 	Print(list);
 
-	list.Insert(NULL, 44);
+	list.insert(NULL, 44);
 	for(int i = 10; i > 0; --i)
 	{
-		list.Insert(list.Last(), i);
+		list.insert(list.end(), i);
 	}
 	Print(list);
 
 
-	iter = list.Find(Equals(7));
+	iter = list.find(Equals(7), true);
 	if(iter != NULL) {printf("%d\n", *iter);} else {printf("is null\n");}
 	
-	iter = list.Find(Equals(55));
+	iter = list.find(Equals(55), true);
 	if(iter != NULL) {printf("%d\n", *iter);} else {printf("is null\n");}
 
-	list.Insert(NULL, 55);
-	list.Insert(list.Last(), 55);
+	list.insert(NULL, 55);
+	list.insert(list.end(), 55);
 	Print(list);
 
-	iter = list.Find(Equals(55));
+	iter = list.find(Equals(55), true);
 	if(iter != NULL) {printf("next %d\n", *(++iter));} else {printf("is null\n");}
 
 	/*find start at iter*/
 	/*at start*/
-	iter = list.First();
-	iter = list.Find(iter, Equals(55));
+	iter = list.begin();
+	iter = list.find(iter, Equals(55));
 	if(iter != NULL) {printf("next %d\n", *(++iter));} else {printf("is null\n");}
 	/*at end*/
-	iter = ++(list.First());
-	iter = list.Find(iter, Equals(55));
+	iter = ++(list.begin());
+	iter = list.find(iter, Equals(55));
 	if(iter != NULL) {printf("prev %d\n", *(--iter));} else {printf("is null\n");}
 	
 	/*merge test
 	**************/	
 	List<int> otherList;
-	while(list.First() != NULL) {list.Delete(list.First());}
+	while(list.begin() != NULL) {list.remove(list.begin());}
 	/*empty empty*/
-	list.Merge(otherList);
+	list.merge(otherList);
 	Print(list);	 
 	/*notempty empty*/
 	for(int i = 10; i > 0; --i)
 	{
-		list.Insert(NULL, i);
+		list.insert(NULL, i);
 	}
-	list.Merge(otherList);
+	list.merge(otherList);
 	Print(list);		 
 	/*empty notempty*/
-	otherList.Merge(list);
+	otherList.merge(list);
 	Print(otherList);		 
 	/*notempty notempty*/		 
-	list.Merge(otherList);
+	list.merge(otherList);
 	Print(list);
 
 	return 0;
