@@ -1,5 +1,5 @@
 #pragma once
-#include "avltree/avltree.h"
+#include "avltree.h"
 #include "appdata.h"
 
 /*

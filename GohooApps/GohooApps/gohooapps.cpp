@@ -1,4 +1,4 @@
-#include "datastruct.h"
+#include "gohooapps.h"
 using namespace avl_tree;
 
 GohooApps::GohooApps()
@@ -98,11 +98,11 @@ int GohooApps::getNextVersion(int curVersion)
 {
 	int res = -1;
 	ListIter<VersionData> i;
-	for (i = mVersionsList.begin(); i != mVersionsList.end() && (*i).versionCode != curVersion; i++);
+	for (i = mVersionsList.begin(); i != mVersionsList.end() && (*i).versionCode != curVersion; ++i);
 
 	if (i != mVersionsList.end())
 	{
-		i++;
+		++i;
 	}
 	VersionData* tmp = mVersionsList.find(curVersion);
 	return res;

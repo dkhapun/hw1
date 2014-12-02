@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
-#include "..\list\list.h"
+#include "list.h"
 #define pow2(n) (1 << (n))
 
 using std::cout;

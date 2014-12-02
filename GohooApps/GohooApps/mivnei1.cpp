@@ -5,7 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <assert.h>
-#include "avltree\AVLTree.h"
+#include "AVLTree.h"
 using namespace std;
 
 
