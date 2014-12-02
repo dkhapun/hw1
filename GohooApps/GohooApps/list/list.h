@@ -13,7 +13,7 @@ public:
 	:
 	pfirst(NULL),
 	plast(NULL),
-	size(0)
+	msize(0)
 	{
 	}
 	/*destruct*/
@@ -29,48 +29,69 @@ public:
 		}
 	}
 	/*get size of list*/
-	int Size() const
+	int size() const
 	{
-		return size;
+		return msize;
 	}
+
+	/*get size of list*/
+	int empty() const
+	{
+		return pfirst == 0;
+	}
+	
 	/*get iterator to first node
 	null if there isn't one*/
-	ListIter<D> First() const
+	ListIter<D> begin() const
 	{
 		return ListIter<D>(pfirst);
 	}
 	/*get iterator to last node
 	null if there isn't one*/
-	ListIter<D> Last() const
+	ListIter<D> end() const
 	{
 		return ListIter<D>(plast);
 	}
 
-	/*Find and return iterator to the first matching node.
-	  null if not found*/
-	ListIter<D> Find(Functor<bool, D const&> const& isMatch)
-	{
-		return Find(First(), isMatch);
-	}
 
-	/*a more general Find, starts search from an iterator*/
-	ListIter<D> Find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
+
+	/*a more general find, starts search from an iterator*/
+	ListIter<D> find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
 	{
 		ListNode<D>* pnode = iter.pnode;
-		while(pnode != NULL && !isMatch(pnode->data))
+		while(pnode != NULL && !isMatch(*(pnode->data)))
 		{
 			pnode = pnode->pnext;
 		}
 		return ListIter<D>(pnode);
 	}
 
-	/*Insert after where the iterator is pointing
+	/*a more specific find, starts search from an iterator*/
+	template<typename K>
+	D* find(K key)
+	{
+		ListNode<D>* pnode = begin().pnode;
+		while (pnode != NULL && K(pnode->data) != key)
+		{
+			pnode = pnode->pnext; 
+		}
+		return pnode->data;
+	}
+
+	/*find and return iterator to the first matching node.
+	null if not found*/
+	ListIter<D> find(Functor<bool, D const&> const& isMatch, bool)
+	{
+		return find(begin(), isMatch);
+	}
+
+	/*insert after where the iterator is pointing
 	  NULL iterator means insert as first*/
-	ListIter<D> Insert(ListIter<D> iter, D const& data)
+	ListIter<D> insert(ListIter<D> iter, D const& data)
 	{
 		/*create node*/
-		ListNode<D>* pnode = new ListNode<D>;
-		pnode->data = D(data);
+		ListNode<D>* pnode = new ListNode<D>();
+		pnode->data = new D(data);
 		/*connect it*/
 		pnode->pprev = iter.pnode;
 		if(iter.pnode != NULL)
@@ -92,12 +113,12 @@ public:
 			plast = pnode;
 		}
 		/**/
-		++size;
+		++msize;
 		return ListIter<D>(pnode);
 	}
 
 	/*delete a node pointed by an iterator*/
-	void Delete(ListIter<D> iter)
+	void remove(ListIter<D> iter)
 	{
 		/*nothing to delete*/
 		if(iter.pnode == NULL){
@@ -122,29 +143,29 @@ public:
 			pfirst = iter.pnode->pnext;
 		}
 		/**/
-		--size;
+		--msize;
 		delete iter.pnode;
 		iter.pnode = NULL;
 	}
 
 	/*merge a list into this list. will keep order using < operator 
 	:/*/
-	List<D>& Merge(List<D> const& other)
+	List<D>& merge(List<D> const& other)
 	{
-		ListIter<D> pcurrent = First();
+		ListIter<D> pcurrent = begin();
 		ListIter<D> pprev = NULL;
-		ListIter<D> pother = other.First();
+		ListIter<D> pother = other.begin();
 		while(pother != NULL)
 		{
 			if(pcurrent == NULL || *pother < *pcurrent)
 			{
 				/*insert after prev*/
-				pprev = Insert(pprev, *pother);
+				pprev = insert(pprev, *pother);
 			}
 			else
 			{
 				/*insert after current*/
-				pprev = Insert(pcurrent, *pother);
+				pprev = insert(pcurrent, *pother);
 				++(++pcurrent);
 			}
 			++pother;
@@ -155,5 +176,5 @@ public:
 private:
 	ListNode<D>* pfirst;
 	ListNode<D>* plast;
-	int size;
+	int msize;
 };

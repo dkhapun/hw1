@@ -20,11 +20,15 @@ extern "C" {
 
 /* Return Values
  * ----------------------------------- */
+
 typedef enum {
-    SUCCESS = 0,
-    FAILURE = -1,
-    ALLOCATION_ERROR = -2,
-    INVALID_INPUT = -3
+    SUCCESS,
+    FAILURE,
+    ALLOCATION_ERROR,
+    INVALID_INPUT,
+	GO_ERR_ILLIGAL_VERSION,
+	GO_ERR_ALREADY_EXISTS,
+	GO_ERR_APP_NOT_FOUND
 } StatusType;
 
 /* Required Interface for the Data Structure

@@ -7,5 +7,5 @@ class ListNode
 public:
 	ListNode<D>* pnext;
 	ListNode<D>* pprev;
-	D data;
+	D* data;
 };

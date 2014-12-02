@@ -11,12 +11,13 @@
 class VersionData
 {
 public:
-	int const versionCode; /*this is the key*/
+	int versionCode; /*this is the key*/
 	avl_tree::AVLTree<DownloadData, int> downloadsTree;
 
 	/*construct*/
 	VersionData(int version);
-
+	VersionData();
 	/*convert to int = get the key*/
 	operator int();
+	VersionData& operator=(const VersionData& data);
 };

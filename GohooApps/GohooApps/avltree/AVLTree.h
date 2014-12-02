@@ -1,6 +1,7 @@
 #pragma once
 #include <stdexcept>
 #include <iostream>
+#include <algorithm>
 #include "..\list\list.h"
 #define pow2(n) (1 << (n))
 
@@ -27,7 +28,7 @@ namespace avl_tree
 		AVLNode(const V& data);
 		AVLNode(const V& data, AVLNode *left, AVLNode *right);
 
-		V mdata;
+		V* mdata;
 		short bf; /*balance factor*/
 		AVLNode *left;
 		AVLNode *right;
@@ -53,7 +54,7 @@ namespace avl_tree
 		/*check if empty*/
 		bool empty();
 		/*insert new value to the tree*/
-		void insert(V);
+		V* insert(V);
 		/*remove value from the tree, by its key*/
 		void remove(K);
 		/*print out the values ordered like a tree*/
@@ -100,7 +101,7 @@ namespace avl_tree
 			List<V> list;
 			void operator()(V data)
 			{
-				list.Insert(list.First(), data);
+				list.insert(list.begin(), data);
 			}
 
 		};
@@ -122,14 +123,14 @@ namespace avl_tree
 template<typename V>
 AVLNode<V>::AVLNode(const V& data) : left(0), right(0)
 {
-	mdata = data;
+	mdata = new V(data);
 }
 template<typename V>
 AVLNode<V>::AVLNode(const V& data, AVLNode *left, AVLNode *right) : left(left), right(right)
 {
-	mdata = data;
+	mdata = new V(data);
 }
-template<typename V>
+template<typename V> 
 AVLNode<V>::~AVLNode()
 {
 	if (left != 0)
@@ -139,6 +140,10 @@ AVLNode<V>::~AVLNode()
 	if (right != 0)
 	{
 		delete right;
+	}
+	if (mdata != 0)
+	{
+		delete mdata;
 	}
 }
 
@@ -169,7 +174,7 @@ int AVLTree<V, K>::height(AVLNode<V> *temp)
 	{
 		int l_height = height(temp->left);
 		int r_height = height(temp->right);
-		int max_height = ::max(l_height, r_height);
+		int max_height = std::max(l_height, r_height);
 		h = max_height + 1;
 	}
 	return h;
@@ -189,11 +194,11 @@ AVLNode<V> * AVLTree<V, K>::find(AVLNode<V> * root, K key)
 	{
 		return NULL;
 	}
-	else if (key < (K)(root->mdata))
+	else if (key < (K)(*(root->mdata)))
 	{
 		root = find(root->left, key);
 	}
-	else if (key > (K)(root->mdata))
+	else if (key > (K)(*(root->mdata)))
 	{
 		root = find(root->right, key);
 	}
@@ -205,12 +210,12 @@ V* AVLTree<V, K>::find(K key)
 	AVLNode<V> * temp = find(mRoot, key);
 	if (temp == 0)
 		return 0;
-	return &(temp->mdata);
+	return temp->mdata;
 }
 template<typename V, typename K>
 V* AVLTree<V, K>::max()
 {
-	return &(mMax->mdata);
+	return mMax->mdata;
 }
 
 /*
@@ -302,7 +307,7 @@ AVLNode<V> *AVLTree<V, K>::balance(AVLNode<V> *temp)
 }
 
 /*
-* Insert Element into the tree
+* insert Element into the tree
 */
 template<typename V, typename K>
 AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value, int lefts)
@@ -316,12 +321,12 @@ AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value, int lefts)
 		}
 		return root;
 	}
-	else if ((K)(value) < (K)(root->mdata))
+	else if ((K)(value) < (K)(*(root->mdata)))
 	{
 		root->left = insert(root->left, value, ++lefts);
 		root = balance(root);
 	}
-	else if ((K)(value) >= (K)(root->mdata))
+	else if ((K)(value) >= (K)(*(root->mdata)))
 	{
 		root->right = insert(root->right, value, lefts);
 		root = balance(root);
@@ -329,13 +334,14 @@ AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value, int lefts)
 	return root;
 }
 template<typename V, typename K>
-void AVLTree<V, K>::insert(V value)
+V* AVLTree<V, K>::insert(V value)
 {
 	AVLNode<V>* cur = insert(mRoot, value, 0);
 	if (mRoot == 0)
 	{
 		mRoot = cur;
 	}
+	return cur->mdata;
 	
 }
 
@@ -350,7 +356,7 @@ AVLNode<V> * AVLTree<V, K>::min(AVLNode<V> * root)
 	return temp;
 }
 /*
-* Insert Element into the tree
+* insert Element into the tree
 */
 template<typename V, typename K>
 AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
@@ -363,12 +369,12 @@ AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
 	AVLNode<V> ** rootside = 0;
 	
 	//test if we found the node to remove
-	if ((K)(value) == (K)(root->left->mdata))
+	if ((K)(value) == (K)(*(root->left->mdata)))
 	{
 		toremove = root->left;
 		rootside = &root->left;
 	}
-	else if ((K)(value) == (K)(root->right->mdata))
+	else if ((K)(value) == (K)(*(root->right->mdata)))
 	{
 		toremove = root->right;
 		rootside = &root->right;
@@ -391,17 +397,17 @@ AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
 		{
 			//goto to minimum in the right subtree
 			AVLNode<V> * mind = min(toremove->right);
-			V tval = mind->mdata;
-			remove(mRoot, (K)(tval));
+			V* tval = new V(*mind->mdata);
+			remove(mRoot, (K)(*tval));
 			toremove->mdata = tval;
 		}
 		return toremove;
 	}
-	else if ((K)(value) < (K)(root->mdata))
+	else if ((K)(value) < (K)(*(root->mdata)))
 	{
 		toremove = remove(root->left, value);
 	}
-	else if ((K)(value) > (K)(root->mdata))
+	else if ((K)(value) > (K)((*root->mdata)))
 	{
 		toremove = remove(root->right, value);
 	}
@@ -455,7 +461,7 @@ void AVLTree<V, K>::display(AVLNode<V> *ptr, int level)
 			cout << "Root -> ";
 		for (i = 0; i < level && ptr != mRoot; i++)
 			cout << "        ";
-		cout << ptr->mdata;
+		cout << *(ptr->mdata);
 		display(ptr->left, level + 1);
 	}
 }
@@ -473,7 +479,7 @@ void AVLTree<V, K>::inorder(AVLNode<V> *tree)
 	if (tree == NULL)
 		return;
 	inorder(tree->left);
-	cout << tree->mdata << "  ";
+	cout << *(tree->mdata) << "  ";
 	inorder(tree->right);
 }
 template<typename V, typename K>
@@ -489,7 +495,7 @@ void AVLTree<V, K>::for_each_inorder(AVLNode<V> *tree, Do& callback)
 	if(tree == NULL)
 		return;
 	for_each_inorder(tree->left, callback);
-	callback(tree->mdata);
+	callback(*(tree->mdata));
 	for_each_inorder(tree->right, callback);
 }
 
@@ -509,7 +515,7 @@ void AVLTree<V, K>::preorder(AVLNode<V> *tree)
 {
 	if (tree == NULL)
 		return;
-	cout << tree->mdata << "  ";
+	cout << *(tree->mdata) << "  ";
 	preorder(tree->left);
 	preorder(tree->right);
 
@@ -529,7 +535,7 @@ void AVLTree<V, K>::postorder(AVLNode<V> *tree)
 		return;
 	postorder(tree->left);
 	postorder(tree->right);
-	cout << tree->mdata << "  ";
+	cout << *(tree->mdata) << "  ";
 }
 template<typename V, typename K>
 void AVLTree<V, K>::postorder()

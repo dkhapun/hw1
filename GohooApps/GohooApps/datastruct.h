@@ -7,16 +7,16 @@
 #include "appdata.h"
 #include "downloaddata.h"
 
-class DataStruct
+class GohooApps
 {
 public:
 	/* Description:   Constructor
 	 */
-	DataStruct();
+	GohooApps();
 	
 	/* Description:   Destructor
 	 */
-	~DataStruct();
+	~GohooApps();
 	
 	/* Description:   Adds a new version.
 	 * Input:         versionCode - The ID of the version to add.
@@ -105,6 +105,10 @@ public:
 	StatusType UpdateDownloads(int groupBase, int multiplyFactor);
 
 private:
+
+	VersionData* insertVersion(int versionCode);
+	StatusType AddApplicationToVersionList(const AppData& myApp);
+
 	List<VersionData> versionsList;
 	avl_tree::AVLTree<AppData, int> appsTree;
 	avl_tree::AVLTree<DownloadData, int> downloadsTree; 

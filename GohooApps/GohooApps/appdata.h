@@ -9,13 +9,14 @@
 class AppData
 {
 public:
-	int const appId; /*this is the key*/
+	int appId; /*this is the key*/
 	int versionCode;
 	int downloadCount;
 
-	/*construct*/
+	/*construct*/ 
 	AppData(int app, int version, int downloads);
 
 	/*convert to int = get the key*/
 	operator int();
+	AppData& operator=(const AppData& data);
 };

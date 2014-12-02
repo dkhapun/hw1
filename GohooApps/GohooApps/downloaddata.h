@@ -11,7 +11,7 @@
 class DownloadData
 {
 public:
-	int const downloadCount; /*this is the key*/
+	int downloadCount; /*this is the key*/
 	avl_tree::AVLTree<AppData, int> appsTree;
 
 	/*construct*/
@@ -19,4 +19,5 @@ public:
 
 	/*convert to int = get the key*/
 	operator int();
+	DownloadData& operator=(const DownloadData& data);
 };
