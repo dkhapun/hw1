@@ -75,7 +75,7 @@ int test()
 	cout << endl << "-------------------------------" << endl;
 	avl.inorder();
 	cout << endl << "-------------------------------" << endl;
-	avl.for_each_inorder(printNode);
+	avl.forEachInorder(printNode);
 
 	assert(avl.find(20) == 0);
 	assert(*(avl.find(5)) == 5);

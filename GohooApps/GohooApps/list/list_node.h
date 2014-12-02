@@ -8,4 +8,8 @@ public:
 	ListNode<D>* pnext;
 	ListNode<D>* pprev;
 	D* data;
+	~ListNode()
+	{
+		delete data;
+	}
 };

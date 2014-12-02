@@ -110,7 +110,7 @@ private:
 	StatusType addApplicationToVersionList(const AppData& myApp);
 	int getNextVersion(int curVersion);
 
-	List<VersionData> versionsList;
+	List<VersionData> mVersionsList;
 	avl_tree::AVLTree<AppData, int> appsTree;
 	avl_tree::AVLTree<DownloadData, int> downloadsTree; 
 };

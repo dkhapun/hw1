@@ -69,7 +69,7 @@ namespace avl_tree
 		List<V> toList();
 		/*generic foreach*/
 		template<class Do>
-		void for_each_inorder(Do& callback);
+		void forEachInorder(Do& callback);
 
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
@@ -87,7 +87,7 @@ namespace avl_tree
 		
 		void display(AVLNode<V> *, int level);
 		template<class Do>
-		void for_each_inorder(AVLNode<V> *, Do& callback);
+		void forEachInorder(AVLNode<V> *, Do& callback);
 		
 		
 
@@ -436,7 +436,7 @@ template<typename V, typename K>
 List<V> AVLTree<V, K>::toList()
 {
 	ListGatherer getter;
-	for_each_inorder(mRoot, getter);
+	forEachInorder(mRoot, getter);
 	return getter.list;
 }
 
@@ -490,20 +490,20 @@ void AVLTree<V, K>::inorder()
 
 template<typename V, typename K>
 template<class Do>
-void AVLTree<V, K>::for_each_inorder(AVLNode<V> *tree, Do& callback)
+void AVLTree<V, K>::forEachInorder(AVLNode<V> *tree, Do& callback)
 {
 	if(tree == NULL)
 		return;
-	for_each_inorder(tree->left, callback);
+	forEachInorder(tree->left, callback);
 	callback(*(tree->mdata));
-	for_each_inorder(tree->right, callback);
+	forEachInorder(tree->right, callback);
 }
 
 template<typename V, typename K>
 template<class Do>
-void AVLTree<V, K>::for_each_inorder(Do& callback)
+void AVLTree<V, K>::forEachInorder(Do& callback)
 {
-	for_each_inorder(mRoot, callback);
+	forEachInorder(mRoot, callback);
 }
 
 
