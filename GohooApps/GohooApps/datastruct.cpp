@@ -29,11 +29,11 @@ StatusType GohooApps::AddApplication(int appID, int versionCode, int downloadCou
 	if (0 == appsTree.insert(appData))
 		return GO_ERR_ALREADY_EXISTS;
 
-	AddApplicationToVersionList(appData);
+	addApplicationToVersionList(appData);
 	return SUCCESS;
 }
 
-StatusType GohooApps::AddApplicationToVersionList(const AppData& myApp)
+StatusType GohooApps::addApplicationToVersionList(const AppData& myApp)
 {
 	if (0 != AddVersion(myApp.versionCode))
 		return INVALID_INPUT;
@@ -46,7 +46,7 @@ StatusType GohooApps::AddApplicationToVersionList(const AppData& myApp)
 
 StatusType GohooApps::RemoveApplication(int appID)
 {
-	AppData myApp = *(appsTree.find(appID));	//get a copy
+	AppData myApp = *(appsTree.find(appID));
 	if (myApp == 0)
 		return SUCCESS;
 
@@ -61,19 +61,40 @@ StatusType GohooApps::RemoveApplication(int appID)
 		downTree.remove(myApp.downloadCount);
 	return SUCCESS;
 }
+
 StatusType GohooApps::IncreaseDownloads(int appID, int downloadIncrease)
 {
 	AppData* myApp = appsTree.find(appID);	//get a copy
 	if (myApp == 0)
 		return GO_ERR_APP_NOT_FOUND;
+
+	//remove from downloads tree
 	AVLTree<DownloadData, int>& downTree = versionsList.find(myApp->versionCode)->downloadsTree;
 	downTree.find(myApp->downloadCount)->appsTree.remove(appID);
-	myApp->downloadCount += downloadIncrease;
-	AddApplicationToVersionList(*myApp);
+	
+	myApp->downloadCount += downloadIncrease;	//will update main tree
+	addApplicationToVersionList(*myApp);
 }
+
 StatusType GohooApps::UpgradeApplication(int appID)
 {
+	AppData* myApp = appsTree.find(appID);	//get a copy
+	if (myApp == 0)
+		return GO_ERR_APP_NOT_FOUND;
+
+	//remove from downloads tree
+	AVLTree<DownloadData, int>& downTree = versionsList.find(myApp->versionCode)->downloadsTree;
+	downTree.find(myApp->downloadCount)->appsTree.remove(appID);
+
+	myApp->versionCode = getNextVersion(myApp->versionCode);
+	addApplicationToVersionList(*myApp);
+
 	return SUCCESS;
+}
+
+int GohooApps::getNextVersion(int curVersion)
+{
+
 }
 StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 {

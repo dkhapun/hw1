@@ -107,7 +107,8 @@ public:
 private:
 
 	VersionData* insertVersion(int versionCode);
-	StatusType AddApplicationToVersionList(const AppData& myApp);
+	StatusType addApplicationToVersionList(const AppData& myApp);
+	int getNextVersion(int curVersion);
 
 	List<VersionData> versionsList;
 	avl_tree::AVLTree<AppData, int> appsTree;
