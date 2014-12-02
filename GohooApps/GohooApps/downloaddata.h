@@ -1,5 +1,6 @@
 #pragma once
 #include "avltree/avltree.h"
+#include "appdata.h"
 
 /*
 * this datatype holds:
@@ -11,7 +12,7 @@ class DownloadData
 {
 public:
 	int const downloadCount; /*this is the key*/
-	avl_tree::AVLTree<int, int> appsTree;
+	avl_tree::AVLTree<AppData, int> appsTree;
 
 	/*construct*/
 	DownloadData(int downloads);

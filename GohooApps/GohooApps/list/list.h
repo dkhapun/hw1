@@ -149,7 +149,7 @@ public:
 			}
 			++pother;
 		}
-
+		return *this;
 	}
 
 private:
