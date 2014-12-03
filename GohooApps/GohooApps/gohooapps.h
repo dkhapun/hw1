@@ -9,6 +9,17 @@
 
 class GohooApps
 {
+	typedef enum {
+		SUCCESS,
+		FAILURE,
+		ALLOCATION_ERROR,
+		INVALID_INPUT,
+		GO_ERR_ILLIGAL_VERSION,
+		GO_ERR_ALREADY_EXISTS,
+		GO_ERR_APP_NOT_FOUND,
+		GO_ERR_BAD_VERSION
+	} StatusType;
+
 public:
 	/* Description:   Constructor
 	 */
