@@ -1,4 +1,4 @@
-#include "datastruct.h"
+#include "gohooapps.h"
 using namespace avl_tree;
 
 GohooApps::GohooApps()
