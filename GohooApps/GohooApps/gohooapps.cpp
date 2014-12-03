@@ -80,7 +80,7 @@ StatusType GohooApps::AddApplication(int appID, int versionCode, int downloadCou
 		return GO_ERR_ALREADY_EXISTS;
 
 	addAppToVersionList(appData);
-	addAppToDownloadTree(mV, appData);
+	addAppToDownloadTree(mDownloadsTree, appData);
 	return SUCCESS;
 }
 

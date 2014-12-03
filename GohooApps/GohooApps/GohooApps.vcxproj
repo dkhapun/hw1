@@ -12,23 +12,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="appdata.cpp" />
-    <ClCompile Include="avltree\AVLTree.cpp" />
-    <ClCompile Include="datastruct.cpp" />
+    <ClCompile Include="AVLTree.cpp" />
     <ClCompile Include="downloaddata.cpp" />
-    <ClCompile Include="list\list_test.cpp" />
+    <ClCompile Include="gohooapps.cpp" />
+    <ClCompile Include="list_test.cpp" />
     <ClCompile Include="mivnei1.cpp" />
     <ClCompile Include="versiondata.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata.h" />
-    <ClInclude Include="avltree\AVLTree.h" />
-    <ClInclude Include="datastruct.h" />
+    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="downloaddata.h" />
+    <ClInclude Include="functor.h" />
+    <ClInclude Include="gohooapps.h" />
     <ClInclude Include="library1.h" />
-    <ClInclude Include="list\functor.h" />
-    <ClInclude Include="list\list.h" />
-    <ClInclude Include="list\list_iter.h" />
-    <ClInclude Include="list\list_node.h" />
+    <ClInclude Include="list.h" />
+    <ClInclude Include="list_iter.h" />
+    <ClInclude Include="list_node.h" />
     <ClInclude Include="versiondata.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

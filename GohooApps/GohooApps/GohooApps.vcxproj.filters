@@ -15,19 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="datastruct.cpp">
+    <ClCompile Include="downloaddata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gohooapps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="list_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mivnei1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="list\list_test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="avltree\AVLTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="downloaddata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="versiondata.cpp">
@@ -36,36 +33,39 @@
     <ClCompile Include="appdata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AVLTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="datastruct.h">
+    <ClInclude Include="downloaddata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="functor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gohooapps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="library1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="list\functor.h">
+    <ClInclude Include="list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="list\list.h">
+    <ClInclude Include="list_iter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="list\list_iter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="list\list_node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="avltree\AVLTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="downloaddata.h">
+    <ClInclude Include="list_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="versiondata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="appdata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AVLTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

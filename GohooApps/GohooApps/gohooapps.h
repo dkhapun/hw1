@@ -106,7 +106,7 @@ public:
 
 private:
 	StatusType addAppToVersionList(const AppData& myApp);
-	StatusType addAppToDownloadTree(AVLTree<DownloadData, int>& tree, const AppData& myApp);
+	StatusType addAppToDownloadTree(avl_tree::AVLTree<DownloadData, int>& tree, const AppData& myApp);
 	int getNextVersion(int curVersion);
 
 	List<VersionData> mVersionsList;
