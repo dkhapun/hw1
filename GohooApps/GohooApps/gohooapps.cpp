@@ -1,17 +1,67 @@
 #include "gohooapps.h"
 using namespace avl_tree;
 
+/*functors for internal use
+**************************/
+class AddAppCount
+{
+public:
+	AddAppCount(int* pcnt) : pcount(pcnt)
+	{
+	}
+	void operator() (DownloadData const& downData)
+	{
+		/*add size of appTree to the count*/
+		*pcount += downData.appsTree.size();
+	}
+private:
+	int* pcount;
+};
+class GetOneAppId
+{
+public:
+	GetOneAppId(int** pposition) : ppos(pposition)
+	{
+	}
+	void operator() (AppData const& appData)
+	{
+		/*set member in array to the app id*/
+		**ppos = appData.appId;
+		/*point to next array slot*/
+		++(*ppos);
+	}
+private:
+	int** ppos;
+};
+class GetAppIds
+{
+public:
+	GetAppIds(int** pposition) : ppos(pposition)
+	{
+	}
+	void operator() (DownloadData& downData)
+	{
+		/*create functor*/
+		GetOneAppId getOneId(ppos);
+		/*go over app ids in increasing order*/
+		downData.appsTree.forEachInorder(getOneId);
+	}
+private:
+	int** ppos;
+};
+
+/*GohooApps implementation
+********************************/
 GohooApps::GohooApps()
 {
 
 }
 
-/* Description:   Destructor
-*/
 GohooApps::~GohooApps()
 {
 
 }
+
 StatusType GohooApps::AddVersion(int versionCode)
 {
 	if (!mVersionsList.empty() && (*mVersionsList.end()).versionCode >= versionCode)
@@ -33,16 +83,7 @@ StatusType GohooApps::AddApplication(int appID, int versionCode, int downloadCou
 	return SUCCESS;
 }
 
-StatusType GohooApps::addApplicationToVersionList(const AppData& myApp)
-{
-	if (0 != AddVersion(myApp.versionCode))
-		return INVALID_INPUT;
 
-	VersionData* vdata = mVersionsList.find(myApp.versionCode);
-	DownloadData* ddata = vdata->downloadsTree.insert(DownloadData(myApp.downloadCount));
-	ddata->appsTree.insert(myApp);
-	return SUCCESS;
-}
 
 StatusType GohooApps::RemoveApplication(int appID)
 {
@@ -97,19 +138,6 @@ StatusType GohooApps::UpgradeApplication(int appID)
 	return SUCCESS;
 }
 
-int GohooApps::getNextVersion(int curVersion)
-{
-	int res = -1;
-	ListIter<VersionData> i;
-	for (i = mVersionsList.begin(); i != mVersionsList.end() && (*i).versionCode != curVersion; ++i);
-
-	if (i != mVersionsList.end())
-	{
-		++i;
-		res = (*i).versionCode;
-	}
-	return res;
-}
 StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 {
 	*appID = -1;
@@ -161,9 +189,84 @@ StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 
 StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **apps, int *numOfApps)
 {
+	/*check input*/
+	if(versionCode == 0 || apps == NULL || numOfApps == NULL)
+	{
+		return INVALID_INPUT;
+	}
+
+	AVLTree<DownloadData, int>* pdownloadsTree;
+	if(versionCode < 0)
+	{
+		/*all apps*/
+		pdownloadsTree = &downloadsTree;
+	}
+	else
+	{
+		/*apps of specific version*/
+		VersionData* pdata = mVersionsList.find(versionCode);
+		if(pdata == NULL)
+		{
+			/*version not found*/
+			*numOfApps = 0;
+			*apps = NULL;
+			return SUCCESS;
+		}
+		pdownloadsTree = &pdata->downloadsTree;
+	}
+	/*count the apps (go over downloads tree)*/
+	*numOfApps = 0;
+	AddAppCount addCount(numOfApps); /*create functor*/
+	pdownloadsTree->forEachInorder(addCount);
+	/*malloc array for app ids*/
+	if(numOfApps > 0)
+	{
+		*apps = (int*)malloc(((unsigned)numOfApps)*sizeof(int));
+		if(*apps == NULL)
+		{
+			return ALLOCATION_ERROR;
+		}
+	}
+	else /*numOfApps == 0*/
+	{
+		*apps = NULL;
+		return SUCCESS;
+	}
+	/*go over downloads tree (in decreasing order) to get the app ids*/
+	int* position = *apps; /*init position to start of array*/
+	GetAppIds getIds(&position); /*create functor*/
+	pdownloadsTree->forEachInorderReverse(getIds);
+
 	return SUCCESS;
 }
 StatusType GohooApps::UpdateDownloads(int groupBase, int multiplyFactor)
 {
 	return SUCCESS;
+}
+
+/*private
+********************/
+StatusType GohooApps::addApplicationToVersionList(const AppData& myApp)
+{
+	if (0 != AddVersion(myApp.versionCode))
+		return INVALID_INPUT;
+
+	VersionData* vdata = mVersionsList.find(myApp.versionCode);
+	DownloadData* ddata = vdata->downloadsTree.insert(DownloadData(myApp.downloadCount));
+	ddata->appsTree.insert(myApp);
+	return SUCCESS;
+}
+
+int GohooApps::getNextVersion(int curVersion)
+{
+	int res = -1;
+	ListIter<VersionData> i;
+	for (i = mVersionsList.begin(); i != mVersionsList.end() && (*i).versionCode != curVersion; ++i);
+
+	if (i != mVersionsList.end())
+	{
+		++i;
+		res = (*i).versionCode;
+	}
+	return res;
 }

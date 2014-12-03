@@ -29,7 +29,7 @@ public:
 	/*better not call this with NULL iterator*/
 	D& operator *()
 	{
-		return *(pnode->data);
+		return *(pnode->pdata);
 	}
 	
 	ListIter& operator ++()

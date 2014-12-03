@@ -7,9 +7,15 @@ class ListNode
 public:
 	ListNode<D>* pnext;
 	ListNode<D>* pprev;
-	D* data;
+	D* pdata;
+
+	ListNode(D const& data)
+	{
+		pdata = new D(data);
+	}
+
 	~ListNode()
 	{
-		delete data;
+		delete pdata;
 	}
 };

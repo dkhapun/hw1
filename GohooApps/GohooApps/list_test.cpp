@@ -94,7 +94,7 @@ int someLie()
 	/*merge test
 	**************/	
 	List<int> otherList;
-	while(list.begin() != NULL) {list.remove(list.begin());}
+	list.removeAll();
 	/*empty empty*/
 	list.merge(otherList);
 	Print(list);	 

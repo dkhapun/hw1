@@ -105,8 +105,6 @@ public:
 	StatusType UpdateDownloads(int groupBase, int multiplyFactor);
 
 private:
-
-	VersionData* insertVersion(int versionCode);
 	StatusType addApplicationToVersionList(const AppData& myApp);
 	int getNextVersion(int curVersion);
 

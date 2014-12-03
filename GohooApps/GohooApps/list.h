@@ -52,6 +52,9 @@ public:
 			delete pcurrent;
 			pcurrent = pnext;
 		}
+		pfirst = NULL;
+		plast = NULL;
+		msize = 0;
 	}
 
 	/*get size of list*/
@@ -86,23 +89,30 @@ public:
 		return find(begin(), isMatch);
 	}
 
-	/*find data of first match (different interface)*/
+	/*find data of first match, null if not found*/
 	template<typename K>
 	D* find(K key)
 	{
 		ListNode<D>* pnode = begin().pnode;
-		while (pnode != NULL && K(pnode->data) != key)
+		while (pnode != NULL && K(*pnode->pdata) != key)
 		{
 			pnode = pnode->pnext; 
 		}
-		return pnode->data;
+		if(pnode != NULL)
+		{
+			return pnode->pdata;
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 
 	/*a more general find, starts search from an iterator*/
 	ListIter<D> find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
 	{
 		ListNode<D>* pnode = iter.pnode;
-		while(pnode != NULL && !isMatch(*(pnode->data)))
+		while(pnode != NULL && !isMatch(*(pnode->pdata)))
 		{
 			pnode = pnode->pnext;
 		}
@@ -115,8 +125,7 @@ public:
 	ListIter<D> insert(ListIter<D> iter, D const& data)
 	{
 		/*create node*/
-		ListNode<D>* pnode = new ListNode<D>();
-		pnode->data = new D(data);
+		ListNode<D>* pnode = new ListNode<D>(data);
 		/*connect it*/
 		pnode->pprev = iter.pnode;
 		if(iter.pnode != NULL)

@@ -45,6 +45,8 @@ namespace avl_tree
 	class AVLTree
 	{
 	public:
+		/*getnum of node in tree*/
+		int size() const;
 		/*find value by key, return 0 if not found*/
 		V* find(K);
 		/*get the value with max key*/
@@ -72,6 +74,8 @@ namespace avl_tree
 		/*generic foreach*/
 		template<class Do>
 		void forEachInorder(Do& callback);
+		template<class Do>
+		void forEachInorderReverse(Do& callback);
 
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
@@ -91,7 +95,8 @@ namespace avl_tree
 		AVLNode<V> * findMin(AVLNode<V> *);
 		template<class Do>
 		void forEachInorder(AVLNode<V> *, Do& callback);
-		
+		template<class Do>
+		void forEachInorderReverse(AVLNode<V> *, Do& callback);
 		
 
 		void inorder(AVLNode<V> *);
@@ -112,6 +117,7 @@ namespace avl_tree
 		AVLNode<V>* mRoot;
 		AVLNode<V>* mMax;
 		AVLNode<V>* mMin;
+		int msize;
 	public:
 		/*construct empty*/
 		AVLTree();
@@ -156,7 +162,7 @@ AVLNode<V>::~AVLNode()
 *********************************************************/
 
 template<typename V, typename K>
-AVLTree<V, K>::AVLTree(void) : mRoot(0)
+AVLTree<V, K>::AVLTree(void) : mRoot(0), msize(0)
 {
 }
 
@@ -168,6 +174,12 @@ AVLTree<V, K>::~AVLTree(void)
 	{
 		delete mRoot;
 	}
+}
+
+template<typename V, typename K>
+int AVLTree<V, K>::size() const
+{
+	return msize;
 }
 
 template<typename V, typename K>
@@ -319,6 +331,7 @@ AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value)
 	if (root == NULL)
 	{
 		root = new AVLNode<V>(value);
+		++msize;
 		return root;
 	}
 	else if ((K)(value) < (K)(*(root->mdata)))
@@ -326,11 +339,12 @@ AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value)
 		root->left = insert(root->left, value);
 		root = balance(root);
 	}
-	else if ((K)(value) >= (K)(*(root->mdata)))
+	else if ((K)(value) > (K)(*(root->mdata)))
 	{
 		root->right = insert(root->right, value);
 		root = balance(root);
 	}
+
 	return root;
 }
 template<typename V, typename K>
@@ -388,7 +402,7 @@ AVLNode<V>* AVLTree<V, K>::findMin(AVLNode<V> * temp)
 
 
 /*
-* insert Element into the tree
+* remove element from the tree
 */
 template<typename V, typename K>
 AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
@@ -534,11 +548,28 @@ void AVLTree<V, K>::forEachInorder(AVLNode<V> *tree, Do& callback)
 
 template<typename V, typename K>
 template<class Do>
+void AVLTree<V, K>::forEachInorderReverse(AVLNode<V> *tree, Do& callback)
+{
+	if(tree == NULL)
+		return;
+	forEachInorderReverse(tree->right, callback);
+	callback(*(tree->mdata));
+	forEachInorderReverse(tree->left, callback);
+}
+
+template<typename V, typename K>
+template<class Do>
 void AVLTree<V, K>::forEachInorder(Do& callback)
 {
 	forEachInorder(mRoot, callback);
 }
 
+template<typename V, typename K>
+template<class Do>
+void AVLTree<V, K>::forEachInorderReverse(Do& callback)
+{
+	forEachInorderReverse(mRoot, callback);
+}
 
 /*
 * Preorder Traversal of AVL Tree
