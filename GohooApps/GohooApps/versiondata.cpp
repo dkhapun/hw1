@@ -3,12 +3,12 @@
 VersionData::VersionData(int version)
 :
 versionCode(version),
-downloadsTree()
+mDownloadsTree()
 {
 }
 VersionData::VersionData() :
 versionCode(0),
-downloadsTree()
+mDownloadsTree()
 {
 
 }
@@ -19,6 +19,6 @@ VersionData::operator int()
 VersionData& VersionData::operator=(const VersionData& data)
 {
 	versionCode = data.versionCode;
-	downloadsTree = data.downloadsTree;
+	mDownloadsTree = data.mDownloadsTree;
 	return *this;
 }

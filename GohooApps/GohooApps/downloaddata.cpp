@@ -3,7 +3,7 @@
 DownloadData::DownloadData(int downloads)
 :
 downloadCount(downloads),
-appsTree()
+mAppsTree()
 {
 }
 
@@ -14,6 +14,6 @@ DownloadData::operator int()
 DownloadData& DownloadData::operator=(const DownloadData& data)
 {
 	downloadCount = data.downloadCount;
-	appsTree = data.appsTree;
+	mAppsTree = data.mAppsTree;
 	return *this;
 }

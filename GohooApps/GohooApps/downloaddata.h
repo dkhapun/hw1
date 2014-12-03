@@ -12,7 +12,7 @@ class DownloadData
 {
 public:
 	int downloadCount; /*this is the key*/
-	avl_tree::AVLTree<AppData, int> appsTree;
+	avl_tree::AVLTree<AppData, int> mAppsTree;
 
 	/*construct*/
 	DownloadData(int downloads);

@@ -12,7 +12,7 @@ class VersionData
 {
 public:
 	int versionCode; /*this is the key*/
-	avl_tree::AVLTree<DownloadData, int> downloadsTree;
+	avl_tree::AVLTree<DownloadData, int> mDownloadsTree;
 
 	/*construct*/
 	VersionData(int version);

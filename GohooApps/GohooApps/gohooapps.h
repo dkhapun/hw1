@@ -105,10 +105,11 @@ public:
 	StatusType UpdateDownloads(int groupBase, int multiplyFactor);
 
 private:
-	StatusType addApplicationToVersionList(const AppData& myApp);
+	StatusType addAppToVersionList(const AppData& myApp);
+	StatusType addAppToDownloadTree(AVLTree<DownloadData, int>& tree, const AppData& myApp);
 	int getNextVersion(int curVersion);
 
 	List<VersionData> mVersionsList;
-	avl_tree::AVLTree<AppData, int> appsTree;
-	avl_tree::AVLTree<DownloadData, int> downloadsTree; 
+	avl_tree::AVLTree<AppData, int> mAppsTree;
+	avl_tree::AVLTree<DownloadData, int> mDownloadsTree; 
 };
