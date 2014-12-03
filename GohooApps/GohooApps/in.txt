@@ -1,0 +1,24 @@
+Init
+AddVersion 4
+AddVersion 3
+AddApplication 101 4 50
+AddVersion 5
+AddApplication 101 5 25
+AddApplication 102 5 25
+GetTopApp -1
+IncreaseDownloads 102 26
+GetAllAppsByDownloads -1
+RemoveApplication 102
+GetAllAppsByDownloads -1
+GetTopApp 5
+UpgradeApplication 101
+GetTopApp 5
+UpgradeApplication 101
+AddApplication 105 4 5
+AddApplication 120 5 15
+GetAllAppsByDownloads -1
+GetAllAppsByDownloads 4
+GetAllAppsByDownloads 5
+UpdateDownloads 5 4
+GetAllAppsByDownloads -1
+Quit
