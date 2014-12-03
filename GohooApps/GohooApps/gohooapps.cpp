@@ -95,12 +95,8 @@ StatusType GohooApps::RemoveApplication(int appID)
 	//remove the app from the main tree
 	mAppsTree.remove(appID);
 	AVLTree<DownloadData, int>& downTree = mVersionsList.find(myApp.versionCode)->mDownloadsTree;
-	AVLTree<AppData, int>& downAppTree = downTree.find(myApp.downloadCount)->mAppsTree;
-
-	//remove the app from the downloads tree and if there are no apps under the download count, remove it too 
-	downAppTree.remove(appID);
-	if (downAppTree.empty())
-		downTree.remove(myApp.downloadCount);
+	removeAppFromDownloadTree(downTree, myApp);
+	removeAppFromDownloadTree(mDownloadsTree, myApp);
 	return SUCCESS;
 }
 
@@ -111,11 +107,16 @@ StatusType GohooApps::IncreaseDownloads(int appID, int downloadIncrease)
 		return GO_ERR_APP_NOT_FOUND;
 
 	//remove from downloads tree
+	
 	AVLTree<DownloadData, int>& downTree = mVersionsList.find(myApp->versionCode)->mDownloadsTree;
-	downTree.find(myApp->downloadCount)->mAppsTree.remove(appID);
+	removeAppFromDownloadTree(downTree, *myApp);
+	removeAppFromDownloadTree(mDownloadsTree, *myApp);
 	
 	myApp->downloadCount += downloadIncrease;	//will update main tree
+
 	addAppToVersionList(*myApp);
+	addAppToDownloadTree(mDownloadsTree, *myApp);
+
 	return SUCCESS;
 }
 
@@ -131,18 +132,20 @@ StatusType GohooApps::UpgradeApplication(int appID)
 	
 	//remove from downloads tree
 	AVLTree<DownloadData, int>& downTree = mVersionsList.find(myApp->versionCode)->mDownloadsTree;
-	downTree.find(myApp->downloadCount)->mAppsTree.remove(appID);
+	removeAppFromDownloadTree(downTree, *myApp);
+	removeAppFromDownloadTree(mDownloadsTree, *myApp);
 
 	myApp->versionCode = newVer;
-	addAppToVersionList(*myApp);
 
+	addAppToVersionList(*myApp);
+	addAppToDownloadTree(mDownloadsTree, *myApp);
 	return SUCCESS;
 }
 
 StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 {
 	*appID = -1;
-	if (mVersionsList.empty())
+	if (mVersionsList.empty() || mAppsTree.empty())
 		return FAILURE;
 
 	ListIter<VersionData> maxNode = mVersionsList.begin();
@@ -150,24 +153,7 @@ StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 	AppData* tempApp = 0;
 	if (versionCode < 0)
 	{
-		//find fist non empty downloads tree
-		for (maxNode = mVersionsList.begin(); maxNode != mVersionsList.end() && (!(*maxNode).mDownloadsTree.empty()); ++maxNode);
-		if (maxNode == mVersionsList.end())
-			return SUCCESS;
-
-		maxApp = (*maxNode).mDownloadsTree.max()->mAppsTree.min();
-		
-		for (; maxNode != mVersionsList.end(); ++maxNode)
-		{
-			if (!(*maxNode).mDownloadsTree.empty())
-			{
-				tempApp = (*maxNode).mDownloadsTree.max()->mAppsTree.min();
-				if (tempApp != 0 && maxApp->downloadCount < tempApp->downloadCount)
-				{
-					maxApp = tempApp;
-				}
-			}
-		}
+		*appID = mDownloadsTree.max()->mAppsTree.min()->appId;
 	}
 	else
 	{
@@ -253,14 +239,25 @@ StatusType GohooApps::addAppToVersionList(const AppData& myApp)
 		return INVALID_INPUT;
 
 	VersionData* vdata = mVersionsList.find(myApp.versionCode);
-	DownloadData* ddata = vdata->mDownloadsTree.insert(DownloadData(myApp.downloadCount));
-	ddata->mAppsTree.insert(myApp);
+	addAppToDownloadTree(vdata->mDownloadsTree, myApp);
 	return SUCCESS;
 }
 
 StatusType GohooApps::addAppToDownloadTree(AVLTree<DownloadData, int>& tree, const AppData& myApp)
 {
+	DownloadData* ddata = tree.insert(DownloadData(myApp.downloadCount));
+	ddata->mAppsTree.insert(myApp);
+	return SUCCESS;
+}
 
+StatusType GohooApps::removeAppFromDownloadTree(avl_tree::AVLTree<DownloadData, int>& tree, const AppData& myApp)
+{
+	AVLTree<AppData, int>& downAppTree = tree.find(myApp.downloadCount)->mAppsTree;
+
+	//remove the app from the downloads tree and if there are no apps under the download count, remove it too 
+	downAppTree.remove(myApp.appId);
+	if (downAppTree.empty())
+		tree.remove(myApp.downloadCount);
 	return SUCCESS;
 }
 int GohooApps::getNextVersion(int curVersion)
