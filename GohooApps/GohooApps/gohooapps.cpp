@@ -64,13 +64,16 @@ GohooApps::~GohooApps()
 
 GohooApps::StatusType GohooApps::AddVersion(int versionCode)
 {
+	GohooApps::StatusType res = FAILURE;
 	if (!mVersionsList.empty() && (*mVersionsList.end()).versionCode >= versionCode)
-		return GO_ERR_ILLIGAL_VERSION;
+		res = FAILURE;
 	
-	if (!mVersionsList.empty() && (*mVersionsList.end()).versionCode < versionCode)
+	if (mVersionsList.empty() || (!mVersionsList.empty() && (*mVersionsList.end()).versionCode < versionCode))
+	{
 		mVersionsList.insert(mVersionsList.begin(), VersionData(versionCode));
-
-	return SUCCESS;
+		res = SUCCESS;
+	}
+	return res;
 }
 
 GohooApps::StatusType GohooApps::AddApplication(int appID, int versionCode, int downloadCount)
@@ -235,10 +238,9 @@ GohooApps::StatusType GohooApps::UpdateDownloads(int groupBase, int multiplyFact
 ********************/
 GohooApps::StatusType GohooApps::addAppToVersionList(const AppData& myApp)
 {
-	if (0 != AddVersion(myApp.versionCode))
-		return INVALID_INPUT;
-
 	VersionData* vdata = mVersionsList.find(myApp.versionCode);
+	if (vdata == 0)
+		return FAILURE;
 	addAppToDownloadTree(vdata->mDownloadsTree, myApp);
 	return SUCCESS;
 }
@@ -246,6 +248,11 @@ GohooApps::StatusType GohooApps::addAppToVersionList(const AppData& myApp)
 GohooApps::StatusType GohooApps::addAppToDownloadTree(AVLTree<DownloadData, int>& tree, const AppData& myApp)
 {
 	DownloadData* ddata = tree.insert(DownloadData(myApp.downloadCount));
+	//if there already a node with the downloads number
+	if (ddata == 0)
+	{
+		ddata = tree.find(DownloadData(myApp.downloadCount));
+	}
 	ddata->mAppsTree.insert(myApp);
 	return SUCCESS;
 }
