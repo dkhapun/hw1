@@ -1,7 +1,7 @@
 #pragma once
 #include "library1.h"
-#include "list.h"
-#include "avltree.h"
+#include "list/list.h"
+#include "avltree/avltree.h"
 
 #include "versiondata.h"
 #include "appdata.h"

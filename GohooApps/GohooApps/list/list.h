@@ -16,33 +16,8 @@ public:
 	msize(0)
 	{
 	}
-
-	/*construct copy*/
-	List(List<D> const& other)
-	:
-	pfirst(NULL),
-	plast(NULL),
-	msize(0)
-	{
-		merge(other);
-	}
-
-	/*assignment*/
-	List<D>& operator =(List<D> const& other)
-	{
-		removeAll();
-		merge(other);
-		return *this;
-	}
-
 	/*destruct*/
 	~List()
-	{
-		removeAll();
-	}
-
-	/*remove all nodes*/
-	void removeAll()
 	{
 		ListNode<D>* pcurrent = pfirst;
 		ListNode<D>* pnext;
@@ -53,14 +28,13 @@ public:
 			pcurrent = pnext;
 		}
 	}
-
 	/*get size of list*/
 	int size() const
 	{
 		return msize;
 	}
 
-	/*check if empty*/
+	/*get size of list*/
 	int empty() const
 	{
 		return pfirst == 0;
@@ -79,24 +53,7 @@ public:
 		return ListIter<D>(plast);
 	}
 
-	/*find and return iterator to the first matching node.
-	null if not found*/
-	ListIter<D> find(Functor<bool, D const&> const& isMatch, bool)
-	{
-		return find(begin(), isMatch);
-	}
 
-	/*find data of first match (different interface)*/
-	template<typename K>
-	D* find(K key)
-	{
-		ListNode<D>* pnode = begin().pnode;
-		while (pnode != NULL && K(pnode->data) != key)
-		{
-			pnode = pnode->pnext; 
-		}
-		return pnode->data;
-	}
 
 	/*a more general find, starts search from an iterator*/
 	ListIter<D> find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
@@ -109,6 +66,24 @@ public:
 		return ListIter<D>(pnode);
 	}
 
+	/*a more specific find, starts search from an iterator*/
+	template<typename K>
+	D* find(K key)
+	{
+		ListNode<D>* pnode = begin().pnode;
+		while (pnode != NULL && K(pnode->data) != key)
+		{
+			pnode = pnode->pnext; 
+		}
+		return pnode->data;
+	}
+
+	/*find and return iterator to the first matching node.
+	null if not found*/
+	ListIter<D> find(Functor<bool, D const&> const& isMatch, bool)
+	{
+		return find(begin(), isMatch);
+	}
 
 	/*insert after where the iterator is pointing
 	  NULL iterator means insert as first*/
@@ -173,8 +148,8 @@ public:
 		iter.pnode = NULL;
 	}
 
-	/*merge a list into this list. 
-	* will keep increasing order using operator <*/
+	/*merge a list into this list. will keep order using < operator 
+	:/*/
 	List<D>& merge(List<D> const& other)
 	{
 		ListIter<D> pcurrent = begin();

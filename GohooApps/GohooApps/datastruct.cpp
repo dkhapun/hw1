@@ -1,5 +1,4 @@
-#include "gohooapps.h"
-#include "memory.h"
+#include "datastruct.h"
 using namespace avl_tree;
 
 GohooApps::GohooApps()
@@ -99,11 +98,11 @@ int GohooApps::getNextVersion(int curVersion)
 {
 	int res = -1;
 	ListIter<VersionData> i;
-	for (i = mVersionsList.begin(); i != mVersionsList.end() && (*i).versionCode != curVersion; ++i);
+	for (i = mVersionsList.begin(); i != mVersionsList.end() && (*i).versionCode != curVersion; i++);
 
 	if (i != mVersionsList.end())
 	{
-		++i;
+		i++;
 	}
 	VersionData* tmp = mVersionsList.find(curVersion);
 	return res;
@@ -114,31 +113,6 @@ StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 }
 StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **apps, int *numOfApps)
 {
-	if(versionCode == 0 || apps == NULL || numOfApps == NULL)
-	{
-		return INVALID_INPUT;
-	}
-
-if(versionCode < 0)
-{
-/*get all apps
-***************************/
-/*get a list of download data in increasing order*/
-List<DownloadData> downList = downloadsTree.toList();
-/*go over it in reverse*/
-
-/*print */
-}
-else
-{
-/*get apps of the specific version*/
-}
-
-/*
-malloc...
-return ALLOCATION_ERROR;
-*/
-
 	return SUCCESS;
 }
 StatusType GohooApps::UpdateDownloads(int groupBase, int multiplyFactor)
