@@ -9,6 +9,8 @@
 
 class GohooApps
 {
+
+public:
 	typedef enum {
 		SUCCESS,
 		FAILURE,
@@ -20,7 +22,6 @@ class GohooApps
 		GO_ERR_BAD_VERSION
 	} StatusType;
 
-public:
 	/* Description:   Constructor
 	 */
 	GohooApps();

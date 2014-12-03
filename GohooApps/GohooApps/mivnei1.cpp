@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <assert.h>
 #include "AVLTree.h"
+#include "library1.h"
+
 using namespace std;
 
 
