@@ -151,7 +151,6 @@ GohooApps::StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 	if (mVersionsList.empty() || mAppsTree.empty())
 		return FAILURE;
 
-	ListIter<VersionData> maxNode = mVersionsList.begin();
 	AppData* maxApp = 0;
 	AppData* tempApp = 0;
 	if (versionCode < 0)
@@ -167,7 +166,7 @@ GohooApps::StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 
 		if (!verData->mDownloadsTree.empty())
 		{
-			maxApp = (*maxNode).mDownloadsTree.max()->mAppsTree.min();
+			maxApp = (*verData).mDownloadsTree.max()->mAppsTree.min();
 		}
 	}
 	if (maxApp != 0)
