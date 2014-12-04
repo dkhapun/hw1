@@ -372,6 +372,8 @@ GohooApps::StatusType GohooApps::UpdateDownloads(int groupBase, int multiplyFact
 
 /*private
 ********************/
+#include <iostream>
+using namespace std;
 GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiplyFactor, 
 	AVLTree<DownloadData, int>& downloadsTree)
 {
@@ -382,7 +384,7 @@ GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiply
 	List<AppData> list2;
 	GetAppDatas getApps(&list1, &list2, groupBase); /*create functor*/
 	downloadsTree.forEachInorder(getApps);
-	
+
 	/*multiply the download counts in list1*/
 	for(ListIter<AppData> iter = list1.begin(); iter != NULL; 
 			++iter)
@@ -417,13 +419,18 @@ GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiply
 	{
 		/*get the download count of current list (from first member)*/
 		int downloadCount = iterOfLists->begin()->downloadCount;
-		/*create download data, with apps*/
-		DownloadData(downloadCount, *iterOfLists);
+		/*insert download data, with apps*/
+		downDataList.insert(downDataList.end(), 
+			DownloadData(downloadCount, *iterOfLists));
 	}
 	
 	/*convert the (ordered) list of "DownloadData" to a tree*/
 	downloadsTree = AVLTree<DownloadData, int>(downDataList);
-
+cout << endl << "printing";
+//mDownloadsTree.display(1);
+//mAppsTree.display(1);
+downloadsTree.display(1);
+cout << endl;
 	return SUCCESS;
 }
 

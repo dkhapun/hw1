@@ -99,7 +99,7 @@ namespace avl_tree
 		template<class Do>
 		void forEachInorderReverse(AVLNode<V> *, Do& callback);
 		AVLNode<V>* createAlmostFullTree(int* pleafsToSkip, int levels, ListIter<V>* piter);
-		AVLNode<V>* createFromList(List<V>& list);
+		AVLNode<V>* createFromList(List<V> const& list);
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
 		void postorder(AVLNode<V> *);
@@ -195,7 +195,7 @@ AVLTree<V, K>::AVLTree(const AVLTree<V, K>& cpy)
 }
 
 template<typename V, typename K>
-AVLNode<V>* AVLTree<V, K>::createFromList(List<V>& list)
+AVLNode<V>* AVLTree<V, K>::createFromList(List<V> const& list)
 {
 	int n = list.size();
 	AVLNode<V>* resRoot;
