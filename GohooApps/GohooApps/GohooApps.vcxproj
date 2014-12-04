@@ -14,6 +14,7 @@
     <ClCompile Include="appdata.cpp" />
     <ClCompile Include="AVLTree.cpp" />
     <ClCompile Include="downloaddata.cpp" />
+    <ClCompile Include="email_test1.cpp" />
     <ClCompile Include="gohooapps.cpp" />
     <ClCompile Include="library1.cpp" />
     <ClCompile Include="list_test.cpp" />
