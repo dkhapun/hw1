@@ -77,6 +77,7 @@ namespace avl_tree
 		void forEachInorder(Do& callback) const;
 		template<class Do>
 		void forEachInorderReverse(Do& callback);
+		void operator=(const AVLTree<V, K>& cpy);
 
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
@@ -153,7 +154,6 @@ AVLNode<V>::AVLNode(const V& data, AVLNode *left, AVLNode *right) : left(left), 
 }
 
 
-
 template<typename V> 
 AVLNode<V>::~AVLNode()
 {
@@ -190,6 +190,16 @@ AVLTree<V, K>::AVLTree(List<V>& list)
 template<typename V, typename K>
 AVLTree<V, K>::AVLTree(const AVLTree<V, K>& cpy)
 {
+	mRoot = createFromList(cpy.toList());
+	updateMinMax();
+}
+
+template<typename V, typename K>
+void AVLTree<V, K>::operator=(const AVLTree<V, K>& cpy)
+{
+	if (mRoot)
+		delete mRoot;
+
 	mRoot = createFromList(cpy.toList());
 	updateMinMax();
 }
