@@ -42,6 +42,9 @@
     <ClCompile Include="main1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="email_test1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="downloaddata.h">
