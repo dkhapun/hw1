@@ -134,6 +134,12 @@ GohooApps::~GohooApps()
 
 GohooApps::StatusType GohooApps::AddVersion(int versionCode)
 {
+	/*check input*/
+	if(versionCode <= 0)
+	{
+		return INVALID_INPUT;
+	}
+
 	GohooApps::StatusType res = FAILURE;
 	if (!mVersionsList.empty() && (*mVersionsList.end()).versionCode >= versionCode)
 		res = FAILURE;
@@ -148,11 +154,26 @@ GohooApps::StatusType GohooApps::AddVersion(int versionCode)
 
 GohooApps::StatusType GohooApps::AddApplication(int appID, int versionCode, int downloadCount)
 {
+	/*check input*/
+	if(appID <= 0 || versionCode <= 0)
+	{
+		return INVALID_INPUT;
+	}
+
+	if(mAppsTree.find(appID) != 0)
+	{
+		return GO_ERR_ALREADY_EXISTS;
+	}
+
 	AppData appData(appID, versionCode, downloadCount);
+	if(addAppToVersionList(appData) == FAILURE)
+	{
+		return GO_ERR_ILLIGAL_VERSION;
+	}
+
 	if (0 == mAppsTree.insert(appData))
 		return GO_ERR_ALREADY_EXISTS;
 
-	addAppToVersionList(appData);
 	addAppToDownloadTree(mDownloadsTree, appData);
 	return SUCCESS;
 }
@@ -161,20 +182,32 @@ GohooApps::StatusType GohooApps::AddApplication(int appID, int versionCode, int 
 
 GohooApps::StatusType GohooApps::RemoveApplication(int appID)
 {
-	AppData myApp = *(mAppsTree.find(appID));
-	if (myApp == 0)
-		return SUCCESS;
+	/*check input*/
+	if(appID <= 0)
+	{
+		return INVALID_INPUT;
+	}
+
+	AppData* pmyApp = mAppsTree.find(appID);
+	if (pmyApp == 0)
+		return GO_ERR_APP_NOT_FOUND;
 
 	//remove the app from the main tree
 	mAppsTree.remove(appID);
-	AVLTree<DownloadData, int>& downTree = mVersionsList.find(myApp.versionCode)->mDownloadsTree;
-	removeAppFromDownloadTree(downTree, myApp);
-	removeAppFromDownloadTree(mDownloadsTree, myApp);
+	AVLTree<DownloadData, int>& downTree = mVersionsList.find(pmyApp->versionCode)->mDownloadsTree;
+	removeAppFromDownloadTree(downTree, *pmyApp);
+	removeAppFromDownloadTree(mDownloadsTree, *pmyApp);
 	return SUCCESS;
 }
 
 GohooApps::StatusType GohooApps::IncreaseDownloads(int appID, int downloadIncrease)
 {
+	/*check input*/
+	if(appID <= 0 || downloadIncrease <= 0)
+	{
+		return INVALID_INPUT;
+	}
+
 	AppData* myApp = mAppsTree.find(appID);	//get a copy
 	if (myApp == 0)
 		return GO_ERR_APP_NOT_FOUND;
@@ -195,6 +228,12 @@ GohooApps::StatusType GohooApps::IncreaseDownloads(int appID, int downloadIncrea
 
 GohooApps::StatusType GohooApps::UpgradeApplication(int appID)
 {
+	/*check input*/
+	if(appID <= 0)
+	{
+		return INVALID_INPUT;
+	}
+
 	AppData* myApp = mAppsTree.find(appID);	//get a copy
 	if (myApp == 0)
 		return GO_ERR_APP_NOT_FOUND;
@@ -217,15 +256,22 @@ GohooApps::StatusType GohooApps::UpgradeApplication(int appID)
 
 GohooApps::StatusType GohooApps::GetTopApp(int versionCode, int *appID)
 {
+	/*check input*/
+	if(appID == NULL || versionCode == 0)
+	{
+		return INVALID_INPUT;
+	}
+
 	*appID = -1;
-	if (mVersionsList.empty() || mAppsTree.empty())
-		return FAILURE;
 
 	AppData* maxApp = 0;
-	AppData* tempApp = 0;
 	if (versionCode < 0)
 	{
-		*appID = mDownloadsTree.max()->mAppsTree.min()->appId;
+		if(!mDownloadsTree.empty())
+		{
+			/*(a node cannot have empty mAppsTree)*/
+			*appID = mDownloadsTree.max()->mAppsTree.min()->appId;
+		}
 	}
 	else
 	{
