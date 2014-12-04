@@ -121,6 +121,8 @@ namespace avl_tree
 	public:
 		/*construct empty*/
 		AVLTree();
+		/*construct with ordered list*/
+		AVLTree(List<V> list);
 		/*destruct*/
 		~AVLTree();
 		
@@ -164,6 +166,12 @@ AVLNode<V>::~AVLNode()
 template<typename V, typename K>
 AVLTree<V, K>::AVLTree(void) : mRoot(0), msize(0)
 {
+}
+
+template<typename V, typename K>
+AVLTree<V, K>::AVLTree(List<V> list) /*todo*/
+{
+
 }
 
 

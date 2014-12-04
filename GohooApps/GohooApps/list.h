@@ -82,13 +82,6 @@ public:
 		return ListIter<D>(plast);
 	}
 
-	/*find and return iterator to the first matching node.
-	null if not found*/
-	ListIter<D> find(Functor<bool, D const&> const& isMatch, bool)
-	{
-		return find(begin(), isMatch);
-	}
-
 	/*find data of first match, null if not found*/
 	template<typename K>
 	D* find(K key)
@@ -106,6 +99,13 @@ public:
 		{
 			return NULL;
 		}
+	}
+
+	/*find and return iterator to the first matching node.
+	null if not found*/
+	ListIter<D> find(Functor<bool, D const&> const& isMatch, bool)
+	{
+		return find(begin(), isMatch);
 	}
 
 	/*a more general find, starts search from an iterator*/

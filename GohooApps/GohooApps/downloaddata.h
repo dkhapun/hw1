@@ -17,6 +17,9 @@ public:
 	/*construct*/
 	DownloadData(int downloads);
 
+	/*construct using an ordered list of apps*/
+	DownloadData(int downloads, List<AppData> appsList);
+
 	/*convert to int = get the key*/
 	operator int();
 	DownloadData& operator=(const DownloadData& data);

@@ -31,6 +31,11 @@ public:
 	{
 		return *(pnode->pdata);
 	}
+
+	D* operator ->()
+	{
+		return pnode->pdata;
+	}
 	
 	ListIter& operator ++()
 	{
