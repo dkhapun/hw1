@@ -99,7 +99,7 @@ namespace avl_tree
 		void forEachInorder(AVLNode<V> *, Do& callback);
 		template<class Do>
 		void forEachInorderReverse(AVLNode<V> *, Do& callback);
-		void createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V> i);
+		void createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V>* i);
 
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
@@ -192,22 +192,30 @@ AVLTree<V, K>::AVLTree(List<V>& list) /*todo*/
 		power++;
 	}
 	AVLNode<V>* root = new AVLNode<V>();
-	createFullEmptyTree(root, power, list.begin());
+	ListIter<V> iter = list.begin();
+	createFullEmptyTree(root, power - 1, &iter);
 	//removeEmptyLeafs(root);
 	mRoot = root;
 }
 
 template<typename V, typename K>
-void AVLTree<V, K>::createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V> i)
+void AVLTree<V, K>::createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V>* i)
 {
 	if (levels == 1)
+	{
+		if (*i != 0)
+		{
+			root->mdata = new V(*(*i));
+			++(*i);
+		}
 		return;
+	}
 	root->left = new AVLNode<V>();
 	createFullEmptyTree(root->left, levels - 1, i);
-	if (i != 0)
+	if (*i != 0)
 	{
-		root->mdata = new V(*i);
-		++i;
+		root->mdata = new V(*(*i));
+		++(*i);
 	}
 	root->right = new AVLNode<V>();
 	createFullEmptyTree(root->right, levels - 1, i);
@@ -519,8 +527,8 @@ AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
 	}
 	if (toremove != 0)
 	{
-		delete toremove;
 		root = balance(root);
+		delete toremove;
 	}
 	return root;
 }

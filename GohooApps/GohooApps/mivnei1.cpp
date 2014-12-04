@@ -106,6 +106,8 @@ int test()
 	list.insert(list.end(), 33);
 	list.insert(list.end(), 35);
 	list.insert(list.end(), 38);
+	list.insert(list.end(), 48);
+	list.insert(list.end(), 58);
 
 	avl_tree::AVLTree<int, int> emtree(list);
 	emtree.display(1);
@@ -123,7 +125,7 @@ void test2()
 
 	avl_tree::AVLTree<App, int> avl;
 }
-int main(int argc, char* argv[])
+int mai2n(int argc, char* argv[])
 {
 	cout << "testing";
 	test();
