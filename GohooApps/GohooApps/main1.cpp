@@ -13,6 +13,7 @@
 /* Holds the "int main()" function and the parser of the shell's           */
 /* command line.                                                           */
 /***************************************************************************/
+//#include <vld.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -385,7 +386,6 @@ static errorType OnQuit(void** DS, const char* const command) {
 
 	isInit = false;
 	printf("Quit done.\n");
-
 	return error_free;
 }
 
