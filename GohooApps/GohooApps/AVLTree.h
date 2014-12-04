@@ -547,6 +547,16 @@ void AVLTree<V, K>::remove(K value)
 		{
 			cur = mRoot;
 			mRoot = mRoot->left;
+			cur->right = 0;
+			cur->left = 0;
+			delete cur;
+		}
+		else if (mRoot->left == 0)
+		{
+			cur = mRoot;
+			mRoot = mRoot->right;
+			cur->right = 0;
+			cur->left = 0;
 			delete cur;
 		}
 		else

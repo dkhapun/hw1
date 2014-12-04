@@ -453,9 +453,12 @@ GohooApps::StatusType GohooApps::removeAppFromDownloadTree(avl_tree::AVLTree<Dow
 	AVLTree<AppData, int>& downAppTree = tree.find(myApp.downloadCount)->mAppsTree;
 
 	//remove the app from the downloads tree and if there are no apps under the download count, remove it too 
-	downAppTree.remove(myApp.appId);
-	if (downAppTree.empty())
-		tree.remove(myApp.downloadCount);
+	if (downAppTree.find(myApp.appId) != 0)
+	{
+		downAppTree.remove(myApp.appId);
+		if (downAppTree.empty())
+			tree.remove(myApp.downloadCount);
+	}
 	return SUCCESS;
 }
 int GohooApps::getNextVersion(int curVersion)
