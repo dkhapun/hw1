@@ -12,14 +12,14 @@ class GohooApps
 
 public:
 	typedef enum {
-		SUCCESS,
-		FAILURE,
-		ALLOCATION_ERROR,
-		INVALID_INPUT,
+		SUCCESS = 0,
+		FAILURE = -1,
+		ALLOCATION_ERROR = -2,
+		INVALID_INPUT = -3,
 		GO_ERR_ILLIGAL_VERSION,
 		GO_ERR_ALREADY_EXISTS,
 		GO_ERR_APP_NOT_FOUND,
-		GO_ERR_BAD_VERSION
+	GO_ERR_BAD_VERSION
 	} StatusType;
 
 	/* Description:   Constructor
@@ -121,6 +121,8 @@ private:
 	StatusType addAppToDownloadTree(avl_tree::AVLTree<DownloadData, int>& tree, const AppData& myApp);
 	StatusType removeAppFromDownloadTree(avl_tree::AVLTree<DownloadData, int>& tree, const AppData& myApp);
 	int getNextVersion(int curVersion);
+	StatusType updateDownloadsTree(int groupBase, int multiplyFactor, 
+		avl_tree::AVLTree<DownloadData, int>& downloadsTree);
 
 	List<VersionData> mVersionsList;
 	avl_tree::AVLTree<AppData, int> mAppsTree;

@@ -49,9 +49,79 @@ public:
 private:
 	int** ppos;
 };
+class UpdateAppDownloads
+{
+public:
+	UpdateAppDownloads(int base, int factor) : 
+	groupBase(base), multiplyFactor(factor)
+	{
+	}
+	void operator() (AppData& appData)
+	{
+		/*update if matches groupBase*/
+		if(appData.appId % groupBase == 0)
+		{
+			appData.downloadCount *= multiplyFactor;
+		}
+	}
+private:
+	int groupBase;
+	int multiplyFactor;
+};
+class GetOneAppData
+{
+public:
+	GetOneAppData(List<AppData>* p1, List<AppData>* p2, int base) 
+	: 
+	plist1(p1),
+	plist2(p2),
+	groupBase(base)
+	{
+	}
+	void operator() (AppData const& appData)
+	{
+		/*list1 if in groupBase*/
+		if(appData.appId % groupBase == 0)
+		{
+			plist1->insert(plist1->end(), appData);
+		}
+		else /*list2 other wise*/
+		{
+			plist2->insert(plist2->end(), appData);
+		}
+	}
+private:
+	List<AppData>* plist1;
+	List<AppData>* plist2; 
+	int groupBase;
+};
+class GetAppDatas
+{
+public:
+	GetAppDatas(List<AppData>* p1, List<AppData>* p2, int base) 
+	: 
+	plist1(p1),
+	plist2(p2),
+	groupBase(base)
+	{
+	}
+	void operator() (DownloadData& downData)
+	{
+		/*create functor*/
+		GetOneAppData getOneApp(plist1, plist2, groupBase);
+		/*go over app ids in increasing order*/
+		downData.mAppsTree.forEachInorder(getOneApp);
+	}
+private:
+	List<AppData>* plist1;
+	List<AppData>* plist2; 
+	int groupBase;
+};
 
-/*GohooApps implementation
-********************************/
+
+/***************************************************************************
+** GohooApps implementation
+****************************************************************************/
 GohooApps::GohooApps()
 {
 
@@ -184,11 +254,11 @@ GohooApps::StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **ap
 		return INVALID_INPUT;
 	}
 
-	AVLTree<DownloadData, int>* pmDownloadsTree;
+	AVLTree<DownloadData, int>* pdownloadsTree;
 	if(versionCode < 0)
 	{
 		/*all apps*/
-		pmDownloadsTree = &mDownloadsTree;
+		pdownloadsTree = &mDownloadsTree;
 	}
 	else
 	{
@@ -201,12 +271,12 @@ GohooApps::StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **ap
 			*apps = NULL;
 			return SUCCESS;
 		}
-		pmDownloadsTree = &pdata->mDownloadsTree;
+		pdownloadsTree = &pdata->mDownloadsTree;
 	}
 	/*count the apps (go over downloads tree)*/
 	*numOfApps = 0;
 	AddAppCount addCount(numOfApps); /*create functor*/
-	pmDownloadsTree->forEachInorder(addCount);
+	pdownloadsTree->forEachInorder(addCount);
 	/*malloc array for app ids*/
 	if(numOfApps > 0)
 	{
@@ -224,17 +294,94 @@ GohooApps::StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **ap
 	/*go over downloads tree (in decreasing order) to get the app ids*/
 	int* position = *apps; /*init position to start of array*/
 	GetAppIds getIds(&position); /*create functor*/
-	pmDownloadsTree->forEachInorderReverse(getIds);
+	pdownloadsTree->forEachInorderReverse(getIds);
 
 	return SUCCESS;
 }
 GohooApps::StatusType GohooApps::UpdateDownloads(int groupBase, int multiplyFactor)
 {
+	StatusType status;
+	/*check input*/
+	if(groupBase < 1 || multiplyFactor <= 0)
+	{
+		return INVALID_INPUT;
+	}
+	
+	/*update appsTree*/
+	UpdateAppDownloads updateApp(groupBase, multiplyFactor);
+	mAppsTree.forEachInorder(updateApp);
+
+	/*for each version update its downloads tree*/
+	for(ListIter<VersionData> iter = mVersionsList.begin(); iter != NULL; 
+		++iter)
+	{
+		updateDownloadsTree(groupBase, multiplyFactor, 
+			iter->mDownloadsTree);
+	}
+	
+	/*update the main downloads tree*/
+	updateDownloadsTree(groupBase, multiplyFactor, mDownloadsTree);
+
 	return SUCCESS;
 }
 
 /*private
 ********************/
+GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiplyFactor, 
+	AVLTree<DownloadData, int>& downloadsTree)
+{
+	/*create 2 ordered lists of "AppData" (ordered by downloads and secondary by id)
+	* list1 - all the apps that match the groupBase
+	* list2 - the rest*/
+	List<AppData> list1;
+	List<AppData> list2;
+	GetAppDatas getApps(&list1, &list2, groupBase); /*create functor*/
+	downloadsTree.forEachInorder(getApps);
+	
+	/*multiply the download counts in list1*/
+	for(ListIter<AppData> iter = list1.begin(); iter != NULL; 
+			++iter)
+	{
+		iter->downloadCount *= multiplyFactor;
+	}
+	
+	/*merge the two lists, keeping order like said above 
+	(operator < is overloaded for "AppData")*/
+	list2.merge(list1);
+	
+	/*split the list to lists 
+	 so that "AppData" with equal download count are in the same list*/
+	List<List<AppData> > listOfLists;
+	ListIter<List<AppData> > iterOfLists = NULL;
+	int prevCount = -1;
+	for(ListIter<AppData> iter = list2.begin(); iter != NULL; ++iter)
+	{
+		if(iter->downloadCount != prevCount)
+		{
+			/*add an empty list*/
+			iterOfLists = listOfLists.insert(listOfLists.end(), List<AppData>());
+		}
+		/*insert current appData to end of current list*/
+		iterOfLists->insert(iterOfLists->end(), *iter);
+		prevCount = iter->downloadCount;
+	}
+	
+	/*convert each (ordered) list to "DownloadData"*/
+	List<DownloadData> downDataList;
+	for(iterOfLists = listOfLists.begin(); iterOfLists != NULL; ++iterOfLists)
+	{
+		/*get the download count of current list (from first member)*/
+		int downloadCount = iterOfLists->begin()->downloadCount;
+		/*create download data, with apps*/
+		DownloadData(downloadCount, *iterOfLists);
+	}
+	
+	/*convert the (ordered) list of "DownloadData" to a tree*/
+	downloadsTree = AVLTree<DownloadData, int>(downDataList);
+
+	return SUCCESS;
+}
+
 GohooApps::StatusType GohooApps::addAppToVersionList(const AppData& myApp)
 {
 	VersionData* vdata = mVersionsList.find(myApp.versionCode);

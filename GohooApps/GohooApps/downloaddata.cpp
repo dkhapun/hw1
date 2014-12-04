@@ -7,6 +7,13 @@ mAppsTree()
 {
 }
 
+DownloadData::DownloadData(int downloads, List<AppData> appsList)
+:
+downloadCount(downloads),
+mAppsTree(appsList)
+{
+}
+
 DownloadData::operator int()
 {
 	return downloadCount;
