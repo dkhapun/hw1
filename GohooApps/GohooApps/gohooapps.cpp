@@ -300,7 +300,6 @@ GohooApps::StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **ap
 }
 GohooApps::StatusType GohooApps::UpdateDownloads(int groupBase, int multiplyFactor)
 {
-	StatusType status;
 	/*check input*/
 	if(groupBase < 1 || multiplyFactor <= 0)
 	{
