@@ -196,7 +196,7 @@ StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **apps, int *nu
 		return INVALID_INPUT;
 	}
 
-	AVLTree<DownloadData, int>* pmDownloadsTree;
+	AVLTree<DownloadData, int>* pdownloadsTree;
 	if(versionCode < 0)
 	{
 		/*all apps*/
