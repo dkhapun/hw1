@@ -106,7 +106,12 @@ StatusType UpdateDownloads(void *DS, int groupBase, int multiplyFactor)
 
 void Quit(void** DS)
 {
-	GohooApps* ds = (GohooApps*) DS;
+	if (*DS == 0)
+		return;
+
+	GohooApps* ds = (GohooApps*) *DS;
+	delete ds;
+	*DS = 0;
 }
 
 
