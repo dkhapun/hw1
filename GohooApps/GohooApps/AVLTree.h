@@ -2,7 +2,6 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
-#include <math.h>
 #include "list.h"
 #define pow2(n) (1 << (n))
 
@@ -99,7 +98,7 @@ namespace avl_tree
 		void forEachInorder(AVLNode<V> *, Do& callback);
 		template<class Do>
 		void forEachInorderReverse(AVLNode<V> *, Do& callback);
-		void createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V>* i);
+		AVLNode<V>* createAlmostFullTree(int* pleafsToSkip, int levels, ListIter<V>* piter);
 
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
@@ -177,49 +176,56 @@ AVLTree<V, K>::AVLTree(void) : mRoot(0), msize(0)
 }
 
 template<typename V, typename K>
-AVLTree<V, K>::AVLTree(List<V>& list) /*todo*/
+AVLTree<V, K>::AVLTree(List<V>& list)
 {
-	int size = list.size();
-	if (size == 0)
-		return;
+	int n = list.size();
 
-	//get number of levels
-	int nodes = 0;
-	int power = 0;
-	while (nodes < size - 1)
+	if(n == 0)
 	{
-		nodes = (int)pow(2, power);
-		power++;
+		mRoot = 0;
+		msize = 0;
+		return;
 	}
-	AVLNode<V>* root = new AVLNode<V>();
+	//get number of levels
+	int levels = 1;
+	int nodes = 1;
+	while(nodes < n)
+	{
+		nodes += pow2(levels);
+		++levels;
+	}
 	ListIter<V> iter = list.begin();
-	createFullEmptyTree(root, power - 1, &iter);
-	//removeEmptyLeafs(root);
-	mRoot = root;
+	int leafsToSkip = nodes - n;
+	mRoot = createAlmostFullTree(&leafsToSkip, levels, &iter);
+	msize = n;
 }
 
 template<typename V, typename K>
-void AVLTree<V, K>::createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V>* i)
+AVLNode<V>* AVLTree<V, K>::createAlmostFullTree(int* pleafsToSkip, int levels, ListIter<V>* piter)
 {
-	if (levels == 1)
+	/*base cases*/
+	/*no more levels*/
+	if(levels == 0)
 	{
-		if (*i != 0)
-		{
-			root->mdata = new V(*(*i));
-			++(*i);
-		}
-		return;
+		return NULL;
 	}
-	root->left = new AVLNode<V>();
-	createFullEmptyTree(root->left, levels - 1, i);
-	if (*i != 0)
+	/*leaf that we should skip*/
+	if(levels == 1 && *pleafsToSkip > 0)
 	{
-		root->mdata = new V(*(*i));
-		++(*i);
+		--(*pleafsToSkip);
+		return NULL;
 	}
-	root->right = new AVLNode<V>();
-	createFullEmptyTree(root->right, levels - 1, i);
 
+	/*create node*/
+	AVLNode<V>* pnode = new AVLNode<V>();
+	/*create left tree*/
+	pnode->left = createAlmostFullTree(pleafsToSkip, levels - 1, piter);
+	/*copy data from list and point to next*/
+	pnode->mdata = new V(**piter);
+	++(*piter);
+	/*create right tree*/
+	pnode->right = createAlmostFullTree(pleafsToSkip, levels - 1, piter);
+	return pnode;
 }
 
 template<typename V, typename K>
