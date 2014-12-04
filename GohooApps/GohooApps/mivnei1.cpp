@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <assert.h>
 #include "AVLTree.h"
+#include "library1.h"
+
 using namespace std;
 
 
@@ -75,6 +77,8 @@ int test()
 	cout << endl << "-------------------------------" << endl;
 	avl.inorder();
 	cout << endl << "-------------------------------" << endl;
+	assert(avl.insert(15) == 0);
+	cout << endl << "-------------------------------" << endl;
 	avl.forEachInorder(printNode);
 
 	assert(avl.find(20) == 0);
@@ -103,7 +107,7 @@ void test2()
 
 	avl_tree::AVLTree<App, int> avl;
 }
-int main(int argc, char* argv[])
+int main55(int argc, char* argv[])
 {
 	cout << "testing";
 	test();

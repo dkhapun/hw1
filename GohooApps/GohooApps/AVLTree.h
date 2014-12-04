@@ -328,21 +328,30 @@ AVLNode<V> *AVLTree<V, K>::balance(AVLNode<V> *temp)
 template<typename V, typename K>
 AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value)
 {
+	AVLNode<V> * tmp = 0;
 	if (root == NULL)
 	{
 		root = new AVLNode<V>(value);
 		++msize;
 		return root;
 	}
-	else if ((K)(value) < (K)(*(root->mdata)))
+	else if ((K) (value) < (K) (*(root->mdata)))
 	{
-		root->left = insert(root->left, value);
+		if (((tmp = insert(root->left, value)) == 0))
+			return 0;
+		root->left = tmp;
 		root = balance(root);
 	}
-	else if ((K)(value) > (K)(*(root->mdata)))
+	else if ((K) (value) > (K) (*(root->mdata)))
 	{
-		root->right = insert(root->right, value);
+		if (((tmp = insert(root->right, value)) == 0))
+			return 0;
+		root->right = tmp;
 		root = balance(root);
+	}
+	else if ((K) (value) == (K) (*(root->mdata)))
+	{
+		return 0;
 	}
 
 	return root;
@@ -356,7 +365,7 @@ V* AVLTree<V, K>::insert(V value)
 		mRoot = cur;
 	}
 	updateMinMax();
-	return cur->mdata;
+	return cur == 0 ? 0 : cur->mdata;
 	
 }
 
@@ -386,12 +395,13 @@ void AVLTree<V, K>::updateMinMax()
 template<typename V, typename K>
 V* AVLTree<V, K>::min()
 {
-	return mMax->mdata;
+	return mMin->mdata;
 }
 
 template<typename V, typename K>
 AVLNode<V>* AVLTree<V, K>::findMin(AVLNode<V> * temp)
 {
+
 	while (temp->left != 0)
 	{
 		temp = temp->left;
@@ -415,12 +425,13 @@ AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
 	AVLNode<V> ** rootside = 0;
 	
 	//test if we found the node to remove
-	if ((K)(value) == (K)(*(root->left->mdata)))
+
+	if (root->left && (K)(value) == (K) (*(root->left->mdata)))
 	{
 		toremove = root->left;
 		rootside = &root->left;
 	}
-	else if ((K)(value) == (K)(*(root->right->mdata)))
+	else if (root->right && (K)(value) == (K) (*(root->right->mdata)))
 	{
 		toremove = root->right;
 		rootside = &root->right;
@@ -467,7 +478,34 @@ AVLNode<V> *AVLTree<V, K>::remove(AVLNode<V> *root, K value)
 template<typename V, typename K>
 void AVLTree<V, K>::remove(K value)
 {
-	AVLNode<V>* cur = remove(mRoot, value);
+	if (empty())
+		return;
+
+	AVLNode<V>* cur;
+
+	if ((K) (value) == (K) (*(mRoot->mdata)))
+	{
+		//goto to minimum in the right subtree
+		if (mRoot->right == 0)
+		{
+			cur = mRoot;
+			mRoot = mRoot->left;
+			delete cur;
+		}
+		else
+		{
+			AVLNode<V> * mind = findMin(mRoot->right);
+			V* tval = new V(*mind->mdata);
+			remove(mRoot, (K) (*tval));
+			mRoot->mdata = tval;
+			cur = mRoot;
+		}
+	}
+	else
+	{
+		cur = remove(mRoot, value);
+	}
+	
 	updateMinMax();
 	if (cur != 0)
 	{

@@ -15,7 +15,9 @@
     <ClCompile Include="AVLTree.cpp" />
     <ClCompile Include="downloaddata.cpp" />
     <ClCompile Include="gohooapps.cpp" />
+    <ClCompile Include="library1.cpp" />
     <ClCompile Include="list_test.cpp" />
+    <ClCompile Include="main1.cpp" />
     <ClCompile Include="mivnei1.cpp" />
     <ClCompile Include="versiondata.cpp" />
   </ItemGroup>
@@ -74,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
