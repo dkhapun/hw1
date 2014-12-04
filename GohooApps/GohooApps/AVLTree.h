@@ -71,10 +71,10 @@ namespace avl_tree
 		/*print out values postorder*/
 		void postorder();
 		/*creates an inrodered list of the values that are in the tree*/
-		List<V> toList();
+		List<V> toList() const;
 		/*generic foreach*/
 		template<class Do>
-		void forEachInorder(Do& callback);
+		void forEachInorder(Do& callback) const;
 		template<class Do>
 		void forEachInorderReverse(Do& callback);
 
@@ -95,11 +95,11 @@ namespace avl_tree
 		void display(AVLNode<V> *, int level);
 		AVLNode<V> * findMin(AVLNode<V> *);
 		template<class Do>
-		void forEachInorder(AVLNode<V> *, Do& callback);
+		void forEachInorder(AVLNode<V> *, Do& callback) const;
 		template<class Do>
 		void forEachInorderReverse(AVLNode<V> *, Do& callback);
 		AVLNode<V>* createAlmostFullTree(int* pleafsToSkip, int levels, ListIter<V>* piter);
-
+		AVLNode<V>* createFromList(List<V>& list);
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
 		void postorder(AVLNode<V> *);
@@ -124,6 +124,9 @@ namespace avl_tree
 		AVLTree();
 		/*construct with ordered list*/
 		AVLTree(List<V>& list);
+
+		AVLTree(const AVLTree<V,K>& cpy);
+
 		/*destruct*/
 		~AVLTree();
 		
@@ -148,6 +151,8 @@ AVLNode<V>::AVLNode(const V& data, AVLNode *left, AVLNode *right) : left(left), 
 {
 	mdata = new V(data);
 }
+
+
 
 template<typename V> 
 AVLNode<V>::~AVLNode()
@@ -178,27 +183,43 @@ AVLTree<V, K>::AVLTree(void) : mRoot(0), msize(0)
 template<typename V, typename K>
 AVLTree<V, K>::AVLTree(List<V>& list)
 {
-	int n = list.size();
+	mRoot = createFromList(list);
+	updateMinMax();
+}
 
-	if(n == 0)
+template<typename V, typename K>
+AVLTree<V, K>::AVLTree(const AVLTree<V, K>& cpy)
+{
+	mRoot = createFromList(cpy.toList());
+	updateMinMax();
+}
+
+template<typename V, typename K>
+AVLNode<V>* AVLTree<V, K>::createFromList(List<V>& list)
+{
+	int n = list.size();
+	AVLNode<V>* resRoot;
+	if (n == 0)
 	{
-		mRoot = 0;
+		resRoot = 0;
 		msize = 0;
-		return;
+		return 0;
 	}
 	//get number of levels
 	int levels = 1;
 	int nodes = 1;
-	while(nodes < n)
+	while (nodes < n)
 	{
 		nodes += pow2(levels);
 		++levels;
 	}
 	ListIter<V> iter = list.begin();
 	int leafsToSkip = nodes - n;
-	mRoot = createAlmostFullTree(&leafsToSkip, levels, &iter);
+	resRoot = createAlmostFullTree(&leafsToSkip, levels, &iter);
 	msize = n;
+	return resRoot;
 }
+
 
 template<typename V, typename K>
 AVLNode<V>* AVLTree<V, K>::createAlmostFullTree(int* pleafsToSkip, int levels, ListIter<V>* piter)
@@ -591,7 +612,7 @@ void AVLTree<V, K>::remove(K value)
 }
 
 template<typename V, typename K>
-List<V> AVLTree<V, K>::toList()
+List<V> AVLTree<V, K>::toList() const
 {
 	ListGatherer getter;
 	forEachInorder(mRoot, getter);
@@ -655,7 +676,7 @@ void AVLTree<V, K>::inorder()
 
 template<typename V, typename K>
 template<class Do>
-void AVLTree<V, K>::forEachInorder(AVLNode<V> *tree, Do& callback)
+void AVLTree<V, K>::forEachInorder(AVLNode<V> *tree, Do& callback) const
 {
 	if(tree == NULL)
 		return;
@@ -677,7 +698,7 @@ void AVLTree<V, K>::forEachInorderReverse(AVLNode<V> *tree, Do& callback)
 
 template<typename V, typename K>
 template<class Do>
-void AVLTree<V, K>::forEachInorder(Do& callback)
+void AVLTree<V, K>::forEachInorder(Do& callback) const
 {
 	forEachInorder(mRoot, callback);
 }
