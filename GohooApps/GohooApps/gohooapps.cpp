@@ -309,15 +309,15 @@ GohooApps::StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **ap
 	else
 	{
 		/*apps of specific version*/
-		VersionData* pdata = mVersionsList.find(versionCode);
-		if(pdata == NULL)
+		VersionData* pverData = mVersionsList.find(versionCode);
+		if(pverData == NULL)
 		{
 			/*version not found*/
 			*numOfApps = 0;
 			*apps = NULL;
 			return SUCCESS;
 		}
-		pdownloadsTree = &pdata->mDownloadsTree;
+		pdownloadsTree = &pverData->mDownloadsTree;
 	}
 	/*count the apps (go over downloads tree)*/
 	*numOfApps = 0;
