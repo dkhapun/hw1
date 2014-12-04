@@ -8,6 +8,9 @@ void* Init()
 
 StatusType AddVersion(void *DS, int versionCode)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
 	GohooApps* ds = (GohooApps*)DS;
 	int res = (int)ds->AddVersion(versionCode);
 	res = res > 3 ? 1 : res;
@@ -17,6 +20,9 @@ StatusType AddVersion(void *DS, int versionCode)
 
 StatusType AddApplication(void *DS, int appID, int versionCode, int downloadCount)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->AddApplication(appID, versionCode, downloadCount);
 	res = res > 3 ? 1 : res;
@@ -26,6 +32,10 @@ StatusType AddApplication(void *DS, int appID, int versionCode, int downloadCoun
 
 StatusType RemoveApplication(void *DS, int appID)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->RemoveApplication(appID);
 	res = res > 3 ? 1 : res;
@@ -33,6 +43,10 @@ StatusType RemoveApplication(void *DS, int appID)
 }
 StatusType IncreaseDownloads(void *DS, int appID, int downloadIncrease)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->IncreaseDownloads(appID, downloadIncrease);
 	res = res > 3 ? 1 : res;
@@ -41,6 +55,10 @@ StatusType IncreaseDownloads(void *DS, int appID, int downloadIncrease)
 
 StatusType UpgradeApplication(void *DS, int appID)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->UpgradeApplication(appID);
 	res = res > 3 ? 1 : res;
@@ -49,6 +67,10 @@ StatusType UpgradeApplication(void *DS, int appID)
 
 StatusType GetTopApp(void *DS, int versionCode, int *appID)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->GetTopApp(versionCode, appID);
 	res = res > 3 ? 1 : res;
@@ -58,6 +80,10 @@ StatusType GetTopApp(void *DS, int versionCode, int *appID)
 
 StatusType GetAllAppsByDownloads(void *DS, int versionCode, int **apps, int *numOfApps)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->GetAllAppsByDownloads(versionCode, apps, numOfApps);
 	res = res > 3 ? 1 : res;
@@ -67,6 +93,10 @@ StatusType GetAllAppsByDownloads(void *DS, int versionCode, int **apps, int *num
 
 StatusType UpdateDownloads(void *DS, int groupBase, int multiplyFactor)
 {
+	if (DS == 0)
+		return INVALID_INPUT;
+
+
 	GohooApps* ds = (GohooApps*) DS;
 	int res = (int) ds->UpdateDownloads(groupBase, multiplyFactor);
 	res = res > 3 ? 1 : res;
