@@ -7,7 +7,7 @@
 #include <assert.h>
 #include "AVLTree.h"
 #include "library1.h"
-
+#include "list.h"
 using namespace std;
 
 
@@ -80,6 +80,7 @@ int test()
 	assert(avl.insert(15) == 0);
 	cout << endl << "-------------------------------" << endl;
 	avl.forEachInorder(printNode);
+	cout << "size: " << avl.size() << endl;
 
 	assert(avl.find(20) == 0);
 	assert(*(avl.find(5)) == 5);
@@ -93,6 +94,21 @@ int test()
 	avl.display(1);
 	avl.remove(5);
 	avl.display(1);
+
+	cout << "size: " << avl.size() << endl;
+
+	List<int> list;
+	list.insert(list.end(), 2);
+	list.insert(list.end(), 4);
+	list.insert(list.end(), 7);
+	list.insert(list.end(), 8);
+	list.insert(list.end(), 12);
+	list.insert(list.end(), 33);
+	list.insert(list.end(), 35);
+	list.insert(list.end(), 38);
+
+	avl_tree::AVLTree<int, int> emtree(list);
+	emtree.display(1);
     return 0;
 }
  
@@ -107,7 +123,7 @@ void test2()
 
 	avl_tree::AVLTree<App, int> avl;
 }
-int main55(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	cout << "testing";
 	test();

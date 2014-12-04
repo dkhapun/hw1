@@ -83,7 +83,7 @@ static bool isInit = false;
 /* main                                                                    */
 /***************************************************************************/
 
-int main(int argc, const char**argv) {
+int main555(int argc, const char**argv) {
 	char buffer[MAX_STRING_INPUT_SIZE];
 
 	// Reading commands

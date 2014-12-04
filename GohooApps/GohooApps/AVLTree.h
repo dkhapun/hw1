@@ -124,7 +124,7 @@ namespace avl_tree
 		/*construct empty*/
 		AVLTree();
 		/*construct with ordered list*/
-		AVLTree(List<V> list);
+		AVLTree(List<V>& list);
 		/*destruct*/
 		~AVLTree();
 		
@@ -177,7 +177,7 @@ AVLTree<V, K>::AVLTree(void) : mRoot(0), msize(0)
 }
 
 template<typename V, typename K>
-AVLTree<V, K>::AVLTree(List<V> list) /*todo*/
+AVLTree<V, K>::AVLTree(List<V>& list) /*todo*/
 {
 	int size = list.size();
 	if (size == 0)
@@ -186,7 +186,7 @@ AVLTree<V, K>::AVLTree(List<V> list) /*todo*/
 	//get number of levels
 	int nodes = 0;
 	int power = 0;
-	while (power < size - 1)
+	while (nodes < size - 1)
 	{
 		nodes = (int)pow(2, power);
 		power++;
@@ -204,9 +204,9 @@ void AVLTree<V, K>::createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V
 		return;
 	root->left = new AVLNode<V>();
 	createFullEmptyTree(root->left, levels - 1, i);
-	if (*i != 0)
+	if (i != 0)
 	{
-		//root->mdata = new V(*(*i));
+		root->mdata = new V(*i);
 		++i;
 	}
 	root->right = new AVLNode<V>();
@@ -558,7 +558,7 @@ void AVLTree<V, K>::remove(K value)
 	updateMinMax();
 	if (cur != 0)
 	{
-	//	delete cur;
+		msize--;
 	}
 	else
 	{
@@ -595,7 +595,11 @@ void AVLTree<V, K>::display(AVLNode<V> *ptr, int level)
 			cout << "Root -> ";
 		for (i = 0; i < level && ptr != mRoot; i++)
 			cout << "        ";
-		cout << *(ptr->mdata);
+		//cout << *(ptr->mdata);
+		if (ptr->mdata)
+			cout << *(ptr->mdata) << "  ";
+		else
+			cout << "[NULL]  ";
 		display(ptr->left, level + 1);
 	}
 }
@@ -613,7 +617,10 @@ void AVLTree<V, K>::inorder(AVLNode<V> *tree)
 	if (tree == NULL)
 		return;
 	inorder(tree->left);
-	cout << *(tree->mdata) << "  ";
+	if (tree->mdata)
+		cout << *(tree->mdata) << "  ";
+	else
+		cout <<"[NULL]  ";
 	inorder(tree->right);
 }
 template<typename V, typename K>
