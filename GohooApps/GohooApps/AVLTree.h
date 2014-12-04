@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 #include "list.h"
 #define pow2(n) (1 << (n))
 
@@ -25,6 +26,7 @@ namespace avl_tree
 	{
 	public:
 
+		AVLNode();
 		AVLNode(const V& data);
 		AVLNode(const V& data, AVLNode *left, AVLNode *right);
 
@@ -97,7 +99,7 @@ namespace avl_tree
 		void forEachInorder(AVLNode<V> *, Do& callback);
 		template<class Do>
 		void forEachInorderReverse(AVLNode<V> *, Do& callback);
-		
+		void createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V> i);
 
 		void inorder(AVLNode<V> *);
 		void preorder(AVLNode<V> *);
@@ -133,6 +135,11 @@ namespace avl_tree
 * Node implementation
 *********************************************************/
 template<typename V>
+AVLNode<V>::AVLNode() : left(0), right(0)
+{
+	mdata = 0;
+}
+template<typename V>
 AVLNode<V>::AVLNode(const V& data) : left(0), right(0)
 {
 	mdata = new V(data);
@@ -142,6 +149,7 @@ AVLNode<V>::AVLNode(const V& data, AVLNode *left, AVLNode *right) : left(left), 
 {
 	mdata = new V(data);
 }
+
 template<typename V> 
 AVLNode<V>::~AVLNode()
 {
@@ -171,9 +179,40 @@ AVLTree<V, K>::AVLTree(void) : mRoot(0), msize(0)
 template<typename V, typename K>
 AVLTree<V, K>::AVLTree(List<V> list) /*todo*/
 {
+	int size = list.size();
+	if (size == 0)
+		return;
 
+	//get number of levels
+	int nodes = 0;
+	int power = 0;
+	while (power < size - 1)
+	{
+		nodes = (int)pow(2, power);
+		power++;
+	}
+	AVLNode<V>* root = new AVLNode<V>();
+	createFullEmptyTree(root, power, list.begin());
+	//removeEmptyLeafs(root);
+	mRoot = root;
 }
 
+template<typename V, typename K>
+void AVLTree<V, K>::createFullEmptyTree(AVLNode<V>* root, int levels, ListIter<V> i)
+{
+	if (levels == 1)
+		return;
+	root->left = new AVLNode<V>();
+	createFullEmptyTree(root->left, levels - 1, i);
+	if (*i != 0)
+	{
+		//root->mdata = new V(*(*i));
+		++i;
+	}
+	root->right = new AVLNode<V>();
+	createFullEmptyTree(root->right, levels - 1, i);
+
+}
 
 template<typename V, typename K>
 AVLTree<V, K>::~AVLTree(void)
