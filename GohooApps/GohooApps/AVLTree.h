@@ -79,7 +79,7 @@ namespace avl_tree
 
 	private:
 		AVLNode<V> *balance(AVLNode<V> *);
-		AVLNode<V> *insert(AVLNode<V> *, V);
+		AVLNode<V> *insert(AVLNode<V> *, V , AVLNode<V> **inserted);
 		AVLNode<V> *find(AVLNode<V> * root, K key);
 		AVLNode<V> *remove(AVLNode<V> * root, K key);
 		
@@ -326,25 +326,26 @@ AVLNode<V> *AVLTree<V, K>::balance(AVLNode<V> *temp)
 * insert Element into the tree
 */
 template<typename V, typename K>
-AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value)
+AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value, AVLNode<V> **inserted)
 {
 	AVLNode<V> * tmp = 0;
 	if (root == NULL)
 	{
 		root = new AVLNode<V>(value);
+		*inserted = root;
 		++msize;
 		return root;
 	}
 	else if ((K) (value) < (K) (*(root->mdata)))
 	{
-		if (((tmp = insert(root->left, value)) == 0))
+		if (((tmp = insert(root->left, value, inserted)) == 0))
 			return 0;
 		root->left = tmp;
 		root = balance(root);
 	}
 	else if ((K) (value) > (K) (*(root->mdata)))
 	{
-		if (((tmp = insert(root->right, value)) == 0))
+		if (((tmp = insert(root->right, value, inserted)) == 0))
 			return 0;
 		root->right = tmp;
 		root = balance(root);
@@ -359,13 +360,14 @@ AVLNode<V> *AVLTree<V, K>::insert(AVLNode<V> *root, V value)
 template<typename V, typename K>
 V* AVLTree<V, K>::insert(V value)
 {
-	AVLNode<V>* cur = insert(mRoot, value);
+	AVLNode<V>* inserted = 0;
+	AVLNode<V>* cur = insert(mRoot, value, &inserted);
 	if (mRoot == 0)
 	{
 		mRoot = cur;
 	}
 	updateMinMax();
-	return cur == 0 ? 0 : cur->mdata;
+	return inserted == 0 ? 0 : inserted->mdata;
 	
 }
 
