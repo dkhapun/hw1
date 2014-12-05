@@ -19,4 +19,7 @@ public:
 	/*convert to int = get the key*/
 	operator int();
 	AppData& operator=(const AppData& data);
+	friend bool operator<(const AppData&, const AppData&);
 };
+
+bool operator<(const AppData& data1, const AppData& data2);

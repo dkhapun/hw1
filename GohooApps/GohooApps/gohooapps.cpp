@@ -391,11 +391,11 @@ GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiply
 	{
 		iter->downloadCount *= multiplyFactor;
 	}
-	
+
 	/*merge the two lists, keeping order like said above 
-	(operator < is overloaded for "AppData")*/
+	("AppData" operator < is overloaded for this)*/
 	list2.merge(list1);
-	
+
 	/*split the list to lists 
 	 so that "AppData" with equal download count are in the same list*/
 	List<List<AppData> > listOfLists;
@@ -423,20 +423,10 @@ GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiply
 		downDataList.insert(downDataList.end(), 
 			DownloadData(downloadCount, *iterOfLists));
 	}
-	
-//cout << endl;	
-//for(ListIter<DownloadData> ite = downDataList.begin(); ite != NULL; ++ite)
-//{
-//cout << ite->downloadCount << "  ";
-//}	
 
 	/*convert the (ordered) list of "DownloadData" to a tree*/
 	downloadsTree = AVLTree<DownloadData, int>(downDataList);
-cout << endl << "printing";
-//mDownloadsTree.display(1);
-//mAppsTree.display(1);
-downloadsTree.display(1);
-cout << endl;
+
 	return SUCCESS;
 }
 

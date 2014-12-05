@@ -137,7 +137,7 @@ void test2()
 
 	avl_tree::AVLTree<App, int> avl;
 }
-int main(int argc, char* argv[])
+int mai2n(int argc, char* argv[])
 {
 	cout << "testing";
 	test();

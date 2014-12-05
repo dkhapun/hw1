@@ -111,7 +111,7 @@ namespace avl_tree
 			List<V> list;
 			void operator()(V data)
 			{
-				list.insert(list.begin(), data);
+				list.insert(list.end(), data);
 			}
 
 		};

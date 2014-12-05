@@ -4,9 +4,6 @@
 #include "functor.h"
 #include <stdlib.h>
 
-#include <iostream>
-using namespace std;
-
 template <class D>
 class List
 {
@@ -189,23 +186,23 @@ public:
 	/*merge a list into this list. will keep increasing order using operator < */
 	List<D>& merge(List<D> const& other)
 	{
+		ListIter<D> pother = other.begin();
 		ListIter<D> pcurrent = begin();
 		ListIter<D> pprev = NULL;
-		ListIter<D> pother = other.begin();
 		while(pother != NULL)
 		{
-			if(pcurrent == NULL || *pother < *pcurrent)
+			if(pcurrent == NULL || (*pother) < (*pcurrent))
 			{
 				/*insert after prev*/
 				pprev = insert(pprev, *pother);
+				++pother;
 			}
 			else
 			{
-				/*insert after current*/
-				pprev = insert(pcurrent, *pother);
-				++(++pcurrent);
+				/*move forward*/
+				pprev = pcurrent;
+				++pcurrent;
 			}
-			++pother;
 		}
 		return *this;
 	}
