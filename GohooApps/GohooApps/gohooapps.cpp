@@ -424,6 +424,12 @@ GohooApps::StatusType GohooApps::updateDownloadsTree(int groupBase, int multiply
 			DownloadData(downloadCount, *iterOfLists));
 	}
 	
+//cout << endl;	
+//for(ListIter<DownloadData> ite = downDataList.begin(); ite != NULL; ++ite)
+//{
+//cout << ite->downloadCount << "  ";
+//}	
+
 	/*convert the (ordered) list of "DownloadData" to a tree*/
 	downloadsTree = AVLTree<DownloadData, int>(downDataList);
 cout << endl << "printing";

@@ -94,7 +94,7 @@ int test()
 	avl.display(1);
 	avl.remove(5);
 	avl.display(1);
-
+	cout << endl;
 	cout << "size: " << avl.size() << endl;
 
 	List<int> list;
@@ -108,9 +108,21 @@ int test()
 	list.insert(list.end(), 38);
 	list.insert(list.end(), 48);
 	list.insert(list.end(), 58);
+	for(ListIter<int> ite = list.begin(); ite != NULL; ++ite)
+	{
+		cout << *ite << "  ";
+	}
 
 	avl_tree::AVLTree<int, int> emtree(list);
 	emtree.display(1);
+
+	cout << endl;
+	list = emtree.toList();
+	for(ListIter<int> ite = list.begin(); ite != NULL; ++ite)
+	{
+		cout << *ite << "  ";
+	}
+	
     return 0;
 }
  
@@ -125,7 +137,7 @@ void test2()
 
 	avl_tree::AVLTree<App, int> avl;
 }
-int mai2n(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	cout << "testing";
 	test();

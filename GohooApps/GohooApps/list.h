@@ -4,6 +4,9 @@
 #include "functor.h"
 #include <stdlib.h>
 
+#include <iostream>
+using namespace std;
+
 template <class D>
 class List
 {
@@ -32,6 +35,7 @@ public:
 	{
 		removeAll();
 		merge(other);
+
 		return *this;
 	}
 

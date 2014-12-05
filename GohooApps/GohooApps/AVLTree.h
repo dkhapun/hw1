@@ -63,7 +63,7 @@ namespace avl_tree
 		/*remove value from the tree, by its key*/
 		void remove(K);
 		/*print out the values ordered like a tree*/
-		void display(int level);
+		void display(int level) const;
 		/*print out values inorder*/
 		void inorder();
 		/*print out values preorder*/
@@ -93,7 +93,7 @@ namespace avl_tree
 		int height(AVLNode<V> *);
 		int diff(AVLNode<V> *);
 		void updateMinMax();
-		void display(AVLNode<V> *, int level);
+		void display(AVLNode<V> *, int level) const;
 		AVLNode<V> * findMin(AVLNode<V> *);
 		template<class Do>
 		void forEachInorder(AVLNode<V> *, Do& callback) const;
@@ -198,9 +198,13 @@ template<typename V, typename K>
 void AVLTree<V, K>::operator=(const AVLTree<V, K>& cpy)
 {
 	if (mRoot)
+	{
 		delete mRoot;
+	}
+	List<V> list = cpy.toList();
 
-	mRoot = createFromList(cpy.toList());
+
+	mRoot = createFromList(list);
 	updateMinMax();
 }
 
@@ -639,7 +643,7 @@ bool AVLTree<V, K>::empty()
 * Display AVL Tree
 */
 template<typename V, typename K>
-void AVLTree<V, K>::display(AVLNode<V> *ptr, int level)
+void AVLTree<V, K>::display(AVLNode<V> *ptr, int level) const
 {
 	int i;
 	if (ptr != NULL)
@@ -659,7 +663,7 @@ void AVLTree<V, K>::display(AVLNode<V> *ptr, int level)
 	}
 }
 template<typename V, typename K>
-void AVLTree<V, K>::display(int level)
+void AVLTree<V, K>::display(int level) const
 {
 	display(mRoot, level);
 }
