@@ -326,7 +326,7 @@ GohooApps::StatusType GohooApps::GetAllAppsByDownloads(int versionCode, int **ap
 	/*malloc array for app ids*/
 	if(numOfApps > 0)
 	{
-		*apps = (int*)malloc(((unsigned)numOfApps)*sizeof(int));
+		*apps = (int*)malloc(((unsigned)*numOfApps)*sizeof(int));
 		if(*apps == NULL)
 		{
 			return ALLOCATION_ERROR;
