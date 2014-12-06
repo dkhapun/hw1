@@ -1,7 +1,6 @@
 #pragma once
 #include "list_node.h"
 #include "list_iter.h"
-#include "functor.h"
 #include <stdlib.h>
 
 template <class D>
@@ -100,24 +99,6 @@ public:
 		{
 			return NULL;
 		}
-	}
-
-	/*find and return iterator to the first matching node.
-	null if not found*/
-	ListIter<D> find(Functor<bool, D const&> const& isMatch, bool)
-	{
-		return find(begin(), isMatch);
-	}
-
-	/*a more general find, starts search from an iterator*/
-	ListIter<D> find(ListIter<D> iter, Functor<bool, D const&> const& isMatch)
-	{
-		ListNode<D>* pnode = iter.pnode;
-		while(pnode != NULL && !isMatch(*(pnode->pdata)))
-		{
-			pnode = pnode->pnext;
-		}
-		return ListIter<D>(pnode);
 	}
 
 
