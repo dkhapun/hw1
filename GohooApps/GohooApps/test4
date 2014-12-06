@@ -1,0 +1,99 @@
+AddVersion 1
+AddApplication 1 1 1
+RemoveApplication 1
+GetTopApp 1
+GetAllAppsByDownloads 1
+IncreaseDownloads 2 3
+UpgradeApplication 2
+UpdateDownloads 2 2
+Quit
+Init
+AddVersion 1
+AddVersion 0
+AddVersion -1
+AddVersion -2
+AddVersion 1
+Quit
+Init
+AddVersion 1
+AddApplication 1 1 1
+AddApplication 2 1 0
+AddApplication 3 0 1
+AddApplication 4 1 -1
+AddApplication 4 -1 2
+AddApplication 1 1 1
+Quit
+Init
+AddVersion 1
+RemoveApplication 1
+RemoveApplication 0
+RemoveApplication -100
+AddApplication 1 1 1
+RemoveApplication 1
+RemoveApplication 1
+Quit
+Init
+AddVersion 1
+AddApplication 1 1 2
+AddApplication 2 1 0
+AddApplication 3 1 1
+IncreaseDownloads 2 3
+GetTopApp 1
+GetAllAppsByDownloads -1
+IncreaseDownloads 2 0
+IncreaseDownloads 0 3
+IncreaseDownloads 2 -1
+IncreaseDownloads -2 3
+Quit
+Init
+AddVersion 1
+AddVersion 2
+AddVersion 3
+AddApplication 1 1 1
+AddApplication 2 1 2
+AddApplication 3 1 3
+AddApplication 10 2 4
+AddApplication 11 2 5
+AddApplication 12 2 6
+UpgradeApplication 1
+GetAllAppsByDownloads 1
+GetAllAppsByDownloads 2
+UpgradeApplication 1
+UpgradeApplication 2
+UpgradeApplication 3
+UpgradeApplication 10
+GetAllAppsByDownloads 1
+GetAllAppsByDownloads -1
+GetAllAppsByDownloads 3
+Quit
+Init
+AddVersion 1
+AddVersion 2
+AddVersion 3
+AddApplication 1 1 1
+AddApplication 2 1 2
+AddApplication 3 1 3
+AddApplication 4 1 4
+AddApplication 5 1 5
+AddApplication 6 1 6
+AddApplication 7 2 1
+AddApplication 8 2 2
+AddApplication 9 2 3
+AddApplication 10 2 4
+AddApplication 11 2 5
+AddApplication 12 2 6
+AddApplication 13 3 1
+AddApplication 14 3 2
+AddApplication 15 3 3
+AddApplication 16 3 4
+AddApplication 17 3 5
+AddApplication 18 3 6
+UpdateDownloads 6 6
+GetAllAppsByDownloads 1
+GetAllAppsByDownloads -1
+GetAllAppsByDownloads 3
+UpdateDownloads 6 0
+UpdateDownloads 1 6
+UpdateDownloads 0 6
+UpdateDownloads 6 -1
+Quit
