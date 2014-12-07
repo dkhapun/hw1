@@ -9,6 +9,9 @@
 #include "library1.h"
 #include "email_test2.h"
 #include <stdlib.h>
+#include "display.h"
+#include <iostream>
+using namespace std;
 
 // STRESS_TEST1 checks DS's Strength at maintaining large amounts of data.
 bool STRESS_TEST1();
@@ -479,6 +482,9 @@ bool STRESS_TEST2() {
 	ASSERT_TRUE( 35 == app );
 
 	// should only successfully remove applications in range 1-40.
+
+
+
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 10) );
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 101) );
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 101) );
@@ -498,7 +504,14 @@ bool STRESS_TEST2() {
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 31) );
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 1) );
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 1) );
+
+cout << endl << "before:" << endl;
+display(DS);
+cout << "--------------------------------------" << endl;
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 6) );
+cout << "after:" << endl;
+display(DS);
+
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 90) );
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 34424) );
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 700) );
@@ -506,6 +519,7 @@ bool STRESS_TEST2() {
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 9) );
 	ASSERT_TRUE( FAILURE == RemoveApplication(DS, 10) );
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 40) );
+
 	ASSERT_TRUE( SUCCESS == RemoveApplication(DS, 30) );
 
 	// checking new top application in each version.
@@ -1076,8 +1090,8 @@ bool STRESS_TEST5() {
 int main() {
 	RUN_TEST(STRESS_TEST1);
 	RUN_TEST(STRESS_TEST2);
-	RUN_TEST(STRESS_TEST3);
-	RUN_TEST(STRESS_TEST4);
-	RUN_TEST(STRESS_TEST5);
+	//RUN_TEST(STRESS_TEST3);
+	//RUN_TEST(STRESS_TEST4);
+	//RUN_TEST(STRESS_TEST5);
 	return 0;
 }
